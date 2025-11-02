@@ -30,7 +30,7 @@ export const ProfilePage = () => {
           </div>
         </>
       ): (
-        <Button onClick={() => navigate('/signup')}>Ro’yxatdan o’tish</Button>    
+        <Button onClick={() => navigate('/signup')}>Ro’yxatdan o’tish</Button>         
       )}
     </div>
   )
