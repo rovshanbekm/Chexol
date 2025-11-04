@@ -2,9 +2,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useGetRegions } from "../../hooks/useRegions"
 
 export const LocationSelect = () => {
-    const { data: regions } = useGetRegions()
-    console.log(regions);
-    
+    const { data: regions } = useGetRegions()    
     return (
         <Select>
             <SelectTrigger className="w-full h-12!">

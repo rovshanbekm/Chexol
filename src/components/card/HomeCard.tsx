@@ -34,7 +34,7 @@ export const HomeCard = () => {
                                 e.preventDefault();
                                 e.stopPropagation();    
                                 handleSave(data);
-                            }} className="w-[42px]! z-10 h-[42px]! cursor-pointer rounded-[12px]!"><ShoppingCart /></Button>
+                            }} className="w-[42px]! z-10 h-[42px]! rounded-[12px]!"><ShoppingCart /></Button>
                         </div>
                     </div>
                 </Link>

@@ -14,6 +14,8 @@ export const Header = () => {
     || pathname === "/payment" 
     || pathname === "/order"
     || pathname === "/profile"
+    || pathname === "/cashback"
+    || pathname === "/order-history"
     return (
         <div className={`flex justify-between gap-2.5 w-full ${hideNavbar && "hidden"}`}>
             <div className="relative  w-full">

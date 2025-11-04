@@ -17,6 +17,9 @@
   --color-statusColor: #00A938;
   --color-bgStatusColor: #00A93812;
   --color-modalTitleColor: #2F2F2F;
+  --color-logoutColor:#FF1111;
+  --color-cashbackTitleColor:#EAECF0;
+  --color-personalColor: #1860C4;
   --font-bodyFont: 'Poppins';
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

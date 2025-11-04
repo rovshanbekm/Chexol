@@ -86,7 +86,7 @@ export const VerifyPage = () => {
             {/* Pastdagi button */}
             <div className="mt-auto flex justify-center">
                 {isCorrect ? (
-                    <Button className="w-full" onClick={() => navigate("/home")}>
+                    <Button className="w-full" onClick={() => navigate("/")}>
                         Tasdiqlash
                     </Button>
                 ) : (

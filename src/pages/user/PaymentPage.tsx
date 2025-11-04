@@ -28,7 +28,7 @@ export const PaymentPage = () => {
     return (
         <div >
             <div className="flex items-center pt-3.5">
-                <button type="button" onClick={() => navigate("/checkout")}>
+                <button type="button" onClick={() => navigate("/checkout")} className="cursor-pointer">
                     <ArrowLeft />
                 </button>
                 <h3 className="font-semibold text-xl text-secondColor pl-10">

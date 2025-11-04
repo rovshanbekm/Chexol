@@ -12,7 +12,7 @@ export const AboutModal = ({ open, toggleOpen }: AboutModalProps) => {
         <AlertDialog open={open} onOpenChange={toggleOpen} >
             <div className="relative">
                 <AlertDialogContent className="flex flex-col gap-5 pt-[11px]! pr-[11px]! pl-5! pb-7.5! rounded-[15px] w-[366px]!">
-                    <AlertDialogCancel className="border-none absolute right-0 top-0 h-10! cursor-pointer"><X /></AlertDialogCancel>
+                    <AlertDialogCancel className="border-none absolute right-0 top-0 h-10"><X /></AlertDialogCancel>
                     <AlertDialogHeader className="flex pt-2.5! text-start">
                         <AlertDialogTitle className="font-semibold text-xl text-modalTitleColor">
                             Buyurtma tafsiloti

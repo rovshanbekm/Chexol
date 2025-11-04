@@ -49,7 +49,7 @@ export const CartPage = () => {
   return (
     <>
       <div className="flex items-center justify-between pt-3.5">
-        <button onClick={() => navigate("/")}>
+        <button onClick={() => navigate("/")} className="cursor-pointer">
           <ArrowLeft />
         </button>
         <h3 className="font-semibold text-xl text-secondColor">Savatcha</h3>

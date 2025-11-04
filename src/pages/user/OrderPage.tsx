@@ -11,7 +11,7 @@ export const OrderPage = () => {
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-center pt-3.5">
-        <button type="button" onClick={() => navigate("/")}>
+        <button type="button" onClick={() => navigate("/")} className="cursor-pointer">
           <ArrowLeft />
         </button>
         <h3 className="font-semibold text-xl text-secondColor pl-[90px]">
@@ -47,7 +47,7 @@ export const OrderPage = () => {
                   <p className="font-semibold text-base text-mainColor">
                     {item.price}
                   </p>
-                  <Button onClick={() => setOpen(true)} className="rounded-[12px]! h-[37px]! w-[76px] cursor-pointer" variant={"outline"}>Batafsil</Button>
+                  <Button onClick={() => setOpen(true)} className="rounded-[12px]! h-[37px]! w-[76px]" variant={"outline"}>Batafsil</Button>
                 </div>
               </div>
             </div>

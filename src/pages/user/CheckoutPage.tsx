@@ -42,7 +42,7 @@ export const CheckoutPage = () => {
     return (
         <form>
             <div className="flex items-center pt-3.5">
-                <button type="button" onClick={() => navigate("/cart")}>
+                <button type="button" onClick={() => navigate("/cart")} className="cursor-pointer">
                     <ArrowLeft />
                 </button>
                 <h3 className="font-semibold text-xl text-secondColor pl-[70px]">
@@ -180,6 +180,7 @@ export const CheckoutPage = () => {
                     />
                     <span className="text-sm text-secondColor">Payme</span>
                 </label>
+                
                 <label
                     htmlFor="click"
                     className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${paymentType === "click"

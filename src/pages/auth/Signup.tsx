@@ -1,41 +1,60 @@
 import { useNavigate } from "react-router-dom"
-import { LocationSelect } from "../../components/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
+import { useGetRegions } from "../../hooks/useRegions"
+// import { LocationSelect } from "../../components/select"
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
-// import { useForm } from "react-hook-form"
+import { Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
+import { usePostUsers } from "../../hooks/useUsers"
+import { getTelegramUserDataID } from "../../services/get_init_data_user_id"
 
-// type FormValues = {
-//     full_name: string;
-//     password: string;
-//     region: string;
-//     username: string;
-//     chat_id: number;
-//     phone: string
-// };
+type FormValues = {
+    full_name?: string;
+    password?: string;
+    region?: string;
+    username?: string;
+    chat_id?: number;
+    phone?: string
+};
 
 export const Signup = () => {
-    // const { handleSubmit } = useForm<FormValues>({
-    //     defaultValues: { full_name: "", password: "", region: "" }
-    // })
+    const { handleSubmit, reset, control, register } = useForm<FormValues>({
+        defaultValues: { username: "", password: "", region: "" }
+    })
     const navigate = useNavigate()
+    const { data: regions } = useGetRegions()
+    const { mutate: createUsers } = usePostUsers()
+    const chat_id = getTelegramUserDataID()
 
-    // const submit = () => {
-    //     const payload = {
-    //         first_name: data.first_name,
-    //         last_name: data.last_name,
-    //         email: data.email,
-    //         role: data.role,
-    //         business_branch: data.business_branch,
-    //     };
-    // }
+    const onSubmit = (data: FormValues) => {
+        const payload = {
+            username: data.username,
+            password: data.password,
+            region: data.region,
+            chat_id: chat_id,
+        };
+
+        createUsers(payload, {
+            onSuccess: () => {
+                reset({
+                    username: "",
+                    password: "",
+                    region: "",
+                });
+                navigate("/verify")
+            },
+        });
+    };
 
     return (
-        <form  className="flex flex-col h-full">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
             <h1 className="font-semibold text-xl text-secondColor text-center">Ro'yxatdan o'tish</h1>
             <div className="flex flex-col gap-7.5 pt-7.5">
                 <div className="flex flex-col gap-[5px]">
                     <label className="text-base leading-5 text-secondColor">Ism</label>
                     <Input
+                        {...register("username", { required: "Username kiritlishi majburiy" })}
                         className="placeholder:text-base placeholder:text-placeholderColor py-3 px-4 focus-visible:ring-0 h-12 focus-visible:border-inputBorderColor! border-inputBorderColor shadow-none "
                         placeholder="Ismingizni kiriting"
                     />
@@ -43,16 +62,36 @@ export const Signup = () => {
                 <div className="flex flex-col gap-[5px]">
                     <label className="text-base leading-5 text-secondColor">Telefon raqam</label>
                     <Input
+                        {...register("password", { required: "Password kiritlishi majburiy" })}
                         className="placeholder:text-base placeholder:text-placeholderColor py-3 px-4 focus-visible:ring-0 h-12 focus-visible:border-inputBorderColor! border-inputBorderColor shadow-none"
                         placeholder="+998(99) 888 90 98"
                     />
                 </div>
                 <div className="flex flex-col gap-[5px] pb-5">
                     <label className="text-base leading-5 text-secondColor">Hudud</label>
-                    <LocationSelect />
+                    <Controller
+                        name="region"
+                        control={control}
+                        render={({ field }) => (
+                            <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="w-full h-12!">
+                                    <SelectValue placeholder="Hududingizni tanlang" className="placeholder:text-base placeholder:text-placeholderColor" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {regions?.map((item: any) => (
+                                            <SelectItem key={item.id} value={item.id}>
+                                                {item.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        )}
+                    />
                 </div>
             </div>
-            <Button onClick={() => navigate("/verify")} className="mt-auto">
+            <Button type="submit" className="mt-auto">
                 Ro’yxatdan o’tish
             </Button>
         </form>
