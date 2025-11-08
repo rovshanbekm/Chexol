@@ -21,7 +21,6 @@ export const useGetBuskets = () => {
 
             } catch (error) {
                 console.log(error);
-                toast.error("Yangi xabar qidirishda xatolik");
                 return []
             }
         },

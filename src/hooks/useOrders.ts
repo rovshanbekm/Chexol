@@ -57,7 +57,7 @@ export const useGetOrders = () => {
 };
 
 
-export const usePostOrdersUpload = (id:string) => {
+export const usePostOrdersUpload = (id: string) => {
     const qc = useQueryClient();
 
     return useMutation({
@@ -87,3 +87,16 @@ export const usePostOrdersUpload = (id:string) => {
         },
     });
 };
+
+export const useGetOrdersById = (id: string) => {
+    return useQuery({
+        queryKey: ["orders", id],
+        enabled: !!id,
+        queryFn: async () => {
+            const url = `${DOMAIN}${ORDERS}${id}/`;
+            const res = await request.get(url);
+            return res?.data ?? null;
+        },
+    });
+};
+

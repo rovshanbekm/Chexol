@@ -9,6 +9,7 @@ export const OrderPage = () => {
   const navigate = useNavigate()
   const { data: orders } = useGetOrders()
   const [open, setOpen] = useState(false)
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   return (
     <div className="flex flex-col gap-2.5 pb-15">
@@ -65,10 +66,13 @@ export const OrderPage = () => {
                     </div>
                     <div className="flex items-center justify-between pt-5">
                       <p className="font-semibold text-base text-mainColor">
-                        {item.price * item.quantity} 
+                        {item.price * item.quantity}
                       </p>
                       <Button
-                        onClick={() => setOpen(true)}
+                        onClick={() => {
+                          setSelectedOrderId(order.id); 
+                          setOpen(true);          
+                        }}
                         className="rounded-[12px]! h-[37px]! w-[76px]"
                         variant={"outline"}
                       >
@@ -80,7 +84,7 @@ export const OrderPage = () => {
               ))}
             </div>
           ))}
-          <AboutModal open={open} toggleOpen={() => setOpen(!open)} />
+          <AboutModal open={open} toggleOpen={() => setOpen(!open)} orderId={selectedOrderId} />
         </div>
       )}
 

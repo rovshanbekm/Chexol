@@ -2,7 +2,7 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGetBusinessDetail } from "../../hooks/useProducts";
 
 export const Header = () => {
@@ -47,14 +47,14 @@ export const Header = () => {
 
                         {!isLoading &&
                             products.map((p: any) => (
-                                <div key={p.id} className=" flex items-center gap-1.5 hover:bg-gray-50 cursor-pointer">
+                                <Link to={`/products/${p.id}`} key={p.id} className=" flex items-center gap-1.5 hover:bg-gray-50 cursor-pointer">
                                     <img
                                         src={`${import.meta.env.VITE_API_URL}${p.image}`}
                                         alt={p.title}
                                         className="w-5 h-7.5 object-cover"
                                     />
                                     <h3 className="text-sm text-secondColor">{p.title}</h3>
-                                </div>
+                                </Link>
                             ))}
                     </div>
                 )}

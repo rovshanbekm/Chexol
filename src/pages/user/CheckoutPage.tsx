@@ -4,7 +4,7 @@ import { Input } from "../../components/ui/input"
 import { useForm } from "react-hook-form"
 import { Button } from "../../components/ui/button"
 import { useGetAddress, useGetBuskets, usePostOrders } from "../../hooks"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 type FormValues = {
@@ -20,65 +20,68 @@ export const CheckoutPage = () => {
     const navigate = useNavigate()
     const { data: cards } = useGetBuskets()
     const { data: addresses } = useGetAddress()
-
     const { mutate: createOrders } = usePostOrders()
     const [valueinput, setValueinput] = useState("")
-    const selectedColors = JSON.parse(localStorage.getItem("selectedColors") || "{}");
 
-    const { watch, reset, handleSubmit, register } = useForm<FormValues>({
-        defaultValues: { full_name: "", phone: "", address: "", payment_type: "", items: [{ product: "", quantity: 0 }], }
+    const { register, handleSubmit, reset, watch, setValue } = useForm<FormValues>({
+        defaultValues: { full_name: "", phone: "", address: "", paymentType: "" },
     })
+
     const paymentType = watch("paymentType")
+
+    useEffect(() => {
+        const savedData = localStorage.getItem("checkout_form");
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            reset(parsed);
+            if (parsed.phone) setValueinput(parsed.phone);
+        }
+    }, [reset]);
+
+
+    useEffect(() => {
+        const subscription = watch((value) => {
+            localStorage.setItem("checkout_form", JSON.stringify(value))
+        })
+        return () => subscription.unsubscribe()
+    }, [watch])
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let input = e.target.value.replace(/\D/g, "");
+        if (!input.startsWith("998") && input.length > 0) {
+            input = "998" + input;
+        }
+        if (input.length > 12) input = input.slice(0, 12);
+
+        let formatted = "";
+        if (input.length > 0) formatted = "+" + input.substring(0, 3);
+        if (input.length > 3) formatted += `(${input.substring(3, 5)})`;
+        if (input.length > 5) formatted += " " + input.substring(5, 8);
+        if (input.length > 8) formatted += " " + input.substring(8, 10);
+        if (input.length > 10) formatted += " " + input.substring(10, 12);
+
+        const formattedValue = formatted.trim();
+        setValueinput(formattedValue);
+        setValue("phone", formattedValue);
+    };
 
 
     const onSubmit = (data: FormValues) => {
         const payload = {
-            full_name: data.full_name,
-            phone: data.phone,
-            address: data.address,
-            payment_type: data.paymentType,
+            ...data,
+            phone: valueinput,
             items: cards.map((item: any) => ({
                 product: item.id,
                 quantity: item.quantity,
-                ...(selectedColors[item.id] && { color: selectedColors[item.id] })
-            }))
-        };
+            })),
+        }
 
         createOrders(payload, {
             onSuccess: () => {
-                reset({
-                    full_name: "",
-                    phone: "",
-                    address: "",
-                    payment_type: "",
-                    items: [{ product: "", quantity: 0 }],
-                });
-                if (paymentType === "card") {
-                    navigate("/payment")
-                } else {
-                    navigate("/order")
-                }
+                localStorage.removeItem("checkout_form")
+                navigate("/order")
             },
-        });
-    };
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let input = e.target.value.replace(/\D/g, "")
-
-        if (!input.startsWith("998") && input.length > 0) {
-            input = "998" + input
-        }
-        if (input.length > 12) input = input.slice(0, 12)
-
-        let formatted = ""
-        if (input.length > 0) formatted = "+" + input.substring(0, 3)
-        if (input.length > 3) formatted += ` (${input.substring(3, 5)}`
-        if (input.length >= 5) formatted += ")"
-        if (input.length > 5) formatted += " " + input.substring(5, 8)
-        if (input.length > 8) formatted += " " + input.substring(8, 10)
-        if (input.length > 10) formatted += " " + input.substring(10, 12)
-
-        setValueinput(formatted.trim())
+        })
     }
     const total = cards?.reduce(
         (sum: number, item: any) => sum + item.price * item.quantity,
@@ -163,7 +166,7 @@ export const CheckoutPage = () => {
                                         {item?.apartment_number && (<> <Dot size={16} /> <span>{item.apartment_number}</span> </>)}
                                     </p>
                                 </div>
-                                <Button onClick={() => navigate("/location", { state: { address: item } })} className="w-9 h-9" variant={"outline"}><PencilLine className="w-4! h-4!" /></Button>
+                                <Button type="button" onClick={() => navigate("/location", { state: { address: item } })} className="w-9 h-9" variant={"outline"}><PencilLine className="w-4! h-4!" /></Button>
                             </div>
                         ))}
                     </div>

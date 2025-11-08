@@ -2,13 +2,14 @@ import { ArrowLeft, CreditCard } from "lucide-react"
 import { Button } from "../../components/ui/button"
 import { useNavigate } from "react-router-dom"
 import { useGetOrders } from "../../hooks"
-import { AboutModal } from "../../components/modal"
+import { OrderHistoryModal } from "../../components/modal"
 import { useState } from "react"
 
 export const OrderHistoryPage = () => {
     const navigate = useNavigate()
     const { data: orders } = useGetOrders()
     const [open, setOpen] = useState(false)
+    const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
     return (
         <div className=" flex flex-col gap-2.5 pb-15">
@@ -72,7 +73,7 @@ export const OrderHistoryPage = () => {
                                                 {item.price * item.quantity}
                                             </p>
                                             <Button
-                                                onClick={() => setOpen(true)}
+                                                onClick={() => {setOpen(true), setSelectedOrderId(order.id)}}
                                                 className="rounded-[12px]! h-[37px]! w-[76px]"
                                                 variant={"outline"}
                                             >
@@ -84,7 +85,7 @@ export const OrderHistoryPage = () => {
                             ))}
                         </div>
                     ))}
-                    <AboutModal open={open} toggleOpen={() => setOpen(!open)} />
+                    <OrderHistoryModal open={open} toggleOpen={() => setOpen(!open)} orderId={selectedOrderId} />
                 </div>
             )}
         </div>

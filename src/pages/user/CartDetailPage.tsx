@@ -5,6 +5,7 @@ import { Button } from "../../components/ui/button";
 import { useForm } from "react-hook-form";
 import { useGetProductsById, usePostCart } from "../../hooks";
 import { toast } from "react-toastify";
+import useStore from "../../context/store";
 
 type FormValues = {
     product_id?: string;
@@ -23,6 +24,7 @@ export const CartDetailPage = () => {
     const [count, setCount] = useState(1);
     const [mainImage, setMainImage] = useState(productsById?.images?.[0]?.image);
     const navigate = useNavigate();
+    const auth = useStore((state) => state.auth);
 
     useEffect(() => {
         setValue("quantity", count);
@@ -69,7 +71,12 @@ export const CartDetailPage = () => {
                 navigate("/cart");
             },
             onError: () => {
-                toast.error("Rang tanlash majburiy")
+                if (!auth) {
+                    toast.error("Iltimos, avval tizimga kiring!");
+                    navigate("/profile")
+                } else {
+                    toast.error("Rang tanlash majburiy")
+                }
             }
         });
     };
@@ -113,7 +120,7 @@ export const CartDetailPage = () => {
                 </div>
 
                 <div className="flex gap-2 pt-2.5">
-                    {productsById?.images?.map((i: any) => i.image).map((img:any, index:number) => (
+                    {productsById?.images?.map((i: any) => i.image).map((img: any, index: number) => (
                         <div
                             key={index}
                             className={`w-[68px] h-[68px] rounded-[12px] border flex items-center justify-center cursor-pointer ${mainImage === img ? "border-mainColor" : "border-gray-300"
@@ -132,7 +139,7 @@ export const CartDetailPage = () => {
                 <div className="pt-2.5 flex flex-col gap-2.5">
                     <h2 className="font-semibold text-lg">{productsById?.title}</h2>
                     <h4 className="text-sm text-placeholderColor">{productsById?.description}</h4>
-                    <h3 className="font-semibold text-xl text-mainColor">{productsById?.price} so’m</h3>
+                    <h3 className="font-semibold text-xl text-mainColor">{Number(productsById?.price).toLocaleString("uz-UZ")} so’m</h3>
                 </div>
             </div>
 
