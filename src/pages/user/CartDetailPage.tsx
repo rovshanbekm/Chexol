@@ -4,6 +4,7 @@ import { Minus, Plus } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { useForm } from "react-hook-form";
 import { useGetProductsById, usePostCart } from "../../hooks";
+import { toast } from "react-toastify";
 
 type FormValues = {
     product_id?: string;
@@ -20,7 +21,7 @@ export const CartDetailPage = () => {
     const { data: productsById } = useGetProductsById(id, selectedColor);
     const { mutate: createBuskets } = usePostCart();
     const [count, setCount] = useState(1);
-    const [mainImage, setMainImage] = useState(productsById?.image);
+    const [mainImage, setMainImage] = useState(productsById?.images?.[0]?.image);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -28,14 +29,14 @@ export const CartDetailPage = () => {
     }, [count, setValue]);
 
     useEffect(() => {
-        if (!selectedColor) return setMainImage(productsById?.image);
+        if (!selectedColor) return setMainImage(productsById?.images?.[0]?.image);
 
         const matchedImage = productsById?.images?.find((img: any) => img.color === selectedColor);
 
         if (matchedImage) {
             setMainImage(matchedImage.image);
         } else {
-            setMainImage(productsById?.image);
+            setMainImage(productsById?.images?.[0]?.image);
         }
     }, [selectedColor, productsById]);
 
@@ -67,6 +68,9 @@ export const CartDetailPage = () => {
                 });
                 navigate("/cart");
             },
+            onError: () => {
+                toast.error("Rang tanlash majburiy")
+            }
         });
     };
 
@@ -87,7 +91,6 @@ export const CartDetailPage = () => {
                     <div className="h-[102px] absolute top-10.5 right-2.5 w-9 rounded-[30px] bg-white flex flex-col items-center justify-center gap-3 p-2 shadow-md">
                         {productsById?.colors?.map((item: any) => {
                             const isActive = selectedColor === item.color;
-
                             return (
                                 <button
                                     key={item.id}
@@ -106,12 +109,11 @@ export const CartDetailPage = () => {
                                 />
                             );
                         })}
-
                     </div>
                 </div>
 
                 <div className="flex gap-2 pt-2.5">
-                    {[productsById?.image, ...(productsById?.images?.map((i: any) => i.image) || [])].map((img, index) => (
+                    {productsById?.images?.map((i: any) => i.image).map((img:any, index:number) => (
                         <div
                             key={index}
                             className={`w-[68px] h-[68px] rounded-[12px] border flex items-center justify-center cursor-pointer ${mainImage === img ? "border-mainColor" : "border-gray-300"

@@ -21,6 +21,8 @@
   --color-cashbackTitleColor:#EAECF0;
   --color-personalColor: #1860C4;
   --color-waitingStatus: #FF9D01;
+  --color-onTheWayStatus: #00B8A9;
+  --color-pendingColorStatus: #0C8CE9;
   --font-bodyFont: 'Poppins';
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

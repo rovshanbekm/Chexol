@@ -37,7 +37,7 @@ export const OrderHistoryPage = () => {
                                 <div key={item.id} className="flex w-full border rounded-[12px] overflow-hidden mb-3">
                                     <img
                                         className="bg-imgBgColor object-cover h-[131px] w-[101px]"
-                                        src={order.payment_proof || item.image}
+                                        src={item.image}
                                         alt={item.title}
                                     />
                                     <div className="p-2.5 flex flex-col flex-1">
@@ -45,17 +45,25 @@ export const OrderHistoryPage = () => {
                                             <h3 className="font-medium text-sm text-secondColor">
                                                 {item.title}
                                             </h3>
-                                            {order.payment_status === "paid" ? (
+                                            {order.status === "delivered" ? (
                                                 <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">
-                                                    To'langan
+                                                    Yetkazildi
                                                 </p>
-                                            ) : order.payment_status === "waiting" ? (
-                                                <p className="text-xs text-waitingStatus px-2.5 h-[33px] bg-waitingStatus/7 rounded-[10px] flex items-center justify-center">
-                                                    Tayyorlanyapti
+                                            ) : order.status === "pending" ? (
+                                                <p className="text-xs text-pendingColorStatus px-2.5 h-[33px] bg-pendingColorStatus/7 rounded-[10px] flex items-center justify-center">
+                                                    Kutilmoqda
+                                                </p>
+                                            ) : order.status === "in_progress" ? (
+                                                <p className="text-xs text-waitingStatus w-[82px] h-[33px] bg-waitingStatus/7 rounded-[10px] flex items-center justify-center">
+                                                    Tayyorlanmoqda
+                                                </p>
+                                            ) : order.status === "on_the_way" ? (
+                                                <p className="text-xs text-onTheWayStatus w-[82px] h-[33px] bg-onTheWayStatus/7 rounded-[10px] flex items-center justify-center">
+                                                    Yetkazilmoqda
                                                 </p>
                                             ) : (
-                                                <p className="text-xs text-statusColor w-[82px] h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">
-                                                    Tasdiqlangan
+                                                <p className="text-xs text-logoutColor w-[82px] h-[33px] bg-logoutColor/7 rounded-[10px] flex items-center justify-center">
+                                                    Bekor qilindi
                                                 </p>
                                             )}
                                         </div>

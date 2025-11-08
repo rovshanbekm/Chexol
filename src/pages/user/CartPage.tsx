@@ -14,7 +14,7 @@ export const CartPage = () => {
   const { data: buskets } = useGetBuskets();
 
   const { mutate: updateBusket } = useUpdateBusket();
-  const {mutate:deleteBusket} = useDeleteBusketsById()
+  const { mutate: deleteBusket } = useDeleteBusketsById()
 
   const handlePlus = (item: any) => {
     if (item.quantity < item.stock) {
@@ -47,14 +47,16 @@ export const CartPage = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between pt-3.5">
+      <div className={`${buskets?.length === 0 ? "flex" : " flex items-center justify-between"} pt-3.5`}>
         <button onClick={() => navigate("/")} className="cursor-pointer">
           <ArrowLeft />
         </button>
-        <h3 className="font-semibold text-xl text-secondColor">Savatcha</h3>
-        <button onClick={() => setOpen(true)} className="cursor-pointer">
-          <Trash2 className="text-red-600" />
-        </button>
+        <h3 className={`font-semibold text-xl text-secondColor ${buskets?.length === 0 && "pl-[106px]"}`}>Savatcha</h3>
+        {buskets?.length > 0 && (
+          <button onClick={() => setOpen(true)} className="cursor-pointer">
+            <Trash2 className="text-red-600" />
+          </button>
+        )}
       </div>
 
       <div className="mt-4 flex flex-col gap-3">
@@ -72,7 +74,7 @@ export const CartPage = () => {
             <Button className="mt-5" onClick={() => navigate("/")}>Aksessuarlarni ko’rish</Button>
           </div>
         ) : (
-          buskets?.map((item: any, index:string) => (
+          buskets?.map((item: any, index: string) => (
             <div
               key={index}
               className="flex w-full border rounded-[12px] overflow-hidden"
@@ -151,7 +153,7 @@ export const CartPage = () => {
         </div>
       )}
 
-      <CartModal open={open} toggleOpen={() => setOpen(!open)}  />
+      <CartModal open={open} toggleOpen={() => setOpen(!open)} />
     </>
   );
 };

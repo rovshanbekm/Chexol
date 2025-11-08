@@ -41,7 +41,7 @@ export const OrderPage = () => {
                 <div key={item.id} className="flex w-full border rounded-[12px] overflow-hidden mb-3">
                   <img
                     className="bg-imgBgColor object-cover h-[131px] w-[101px]"
-                    src={order.payment_proof || item.image}
+                    src={item.image}
                     alt={item.title}
                   />
                   <div className="p-2.5 flex flex-col flex-1">
@@ -65,7 +65,7 @@ export const OrderPage = () => {
                     </div>
                     <div className="flex items-center justify-between pt-5">
                       <p className="font-semibold text-base text-mainColor">
-                        {item.price * item.quantity} {/* umumiy narx */}
+                        {item.price * item.quantity} 
                       </p>
                       <Button
                         onClick={() => setOpen(true)}

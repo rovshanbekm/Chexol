@@ -73,7 +73,7 @@ export const usePostOrdersUpload = (id:string) => {
         },
 
         onSuccess: (result) => {
-            qc.invalidateQueries({ queryKey: ['orders'] });
+            qc.invalidateQueries({ queryKey: ['orders', 'buskets'] });
             toast.success(result.data?.data);
         },
 
