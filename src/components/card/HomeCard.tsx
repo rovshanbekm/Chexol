@@ -1,6 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetFilteredProducts, useGetProducts } from "../../hooks/useProducts";
 import sessionStore from "../../utils/sessionStore";
 import { usePostCart } from "../../hooks";
@@ -17,6 +17,7 @@ export const HomeCard = () => {
         defaultValues: { product_id: "", quantity: 1 },
     });
 
+    const navigate = useNavigate()
     const settingsCategoryTab = sessionStore((state) => state.settingsCategoryTab);
     const activeFilter = sessionStore((state) => state.activeFilter);
     const selectedColors = JSON.parse(localStorage.getItem("selectedColors") || "{}");
@@ -42,14 +43,14 @@ export const HomeCard = () => {
             ? filteredProducts
             : allProducts;
 
-    const handleAddToCart = (e: React.MouseEvent, productId: string, item:any) => {
+    const handleAddToCart = (e: React.MouseEvent, productId: string, item: any) => {
         e.preventDefault();
         e.stopPropagation();
 
         const payload = {
             product_id: productId,
             quantity: 1,
-            ...(selectedColors[item.id] && { color: selectedColors[item.id] })
+            color: selectedColors[item.id]
         };
 
         createBuskets(payload, {
@@ -58,6 +59,7 @@ export const HomeCard = () => {
                 toast.success("Mahsulot savatga qo'shildi");
             },
         });
+        navigate("/cart")
     };
 
     return (
@@ -78,7 +80,7 @@ export const HomeCard = () => {
                         </p>
                         <div className="flex items-center justify-between">
                             <h4 className="font-semibold text-base text-mainColor">
-                                {item?.price} so‘m
+                                {Number(item?.price).toLocaleString("uz-UZ")} so‘m
                             </h4>
                             <Button
                                 type="button"

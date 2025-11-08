@@ -88,7 +88,7 @@ export const CartPage = () => {
                     {item.title}
                   </h3>
                   <p className="font-semibold text-base text-mainColor">
-                    {item.price} so‘m
+                    {Number(item.price).toLocaleString("uz-UZ")} so‘m
                   </p>
                 </div>
 

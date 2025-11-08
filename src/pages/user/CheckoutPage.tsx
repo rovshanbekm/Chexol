@@ -107,7 +107,7 @@ export const CheckoutPage = () => {
                         <img className="h-[89px] w-[67px] object-contain" src={`${item.image}`} alt="" />
                         <div className="flex flex-col gap-2">
                             <h3 className="font-medium text-sm text-secondColor">{item.title}</h3>
-                            <h5 className="font-semibold text-mainColor">{item.price}</h5>
+                            <h5 className="font-semibold text-mainColor">{Number(item.price).toLocaleString("uz-UZ")}</h5>
                             <h3 className="text-xs text-placeholderColor">Miqdor: {item.quantity}</h3>
                         </div>
                     </div>
