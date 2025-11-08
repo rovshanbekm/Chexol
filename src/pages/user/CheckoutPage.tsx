@@ -1,17 +1,66 @@
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Dot, PencilLine, Plus } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { Input } from "../../components/ui/input"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { Button } from "../../components/ui/button"
+import { useGetAddress, useGetBuskets, usePostOrders } from "../../hooks"
+import { useState } from "react"
+
+
+type FormValues = {
+    full_name?: string;
+    phone?: string;
+    address?: string;
+    payment_type?: string;
+    items?: [{ product: string, quantity: number }];
+    paymentType?: string
+};
 
 export const CheckoutPage = () => {
     const navigate = useNavigate()
-    const [valueinput, setValueinput] = useState("")
+    const { data: cards } = useGetBuskets()
+    const { data: addresses } = useGetAddress()
 
-    const { setValue, watch } = useForm()
-    const deliveryType = watch("deliveryType")
+    const { mutate: createOrders } = usePostOrders()
+    const [valueinput, setValueinput] = useState("")
+    const selectedColors = JSON.parse(localStorage.getItem("selectedColors") || "{}");
+
+    const { watch, reset, handleSubmit, register } = useForm<FormValues>({
+        defaultValues: { full_name: "", phone: "", address: "", payment_type: "", items: [{ product: "", quantity: 0 }], }
+    })
     const paymentType = watch("paymentType")
+
+
+    const onSubmit = (data: FormValues) => {
+        const payload = {
+            full_name: data.full_name,
+            phone: data.phone,
+            address: data.address,
+            payment_type: data.paymentType,
+            items: cards.map((item: any) => ({
+                product: item.id,
+                quantity: item.quantity,
+                ...(selectedColors[item.id] && { color: selectedColors[item.id] })
+            }))
+        };
+
+        createOrders(payload, {
+            onSuccess: () => {
+                reset({
+                    full_name: "",
+                    phone: "",
+                    address: "",
+                    payment_type: "",
+                    items: [{ product: "", quantity: 0 }],
+                });
+                if (paymentType === "card") {
+                    navigate("/payment")
+                } else {
+                    navigate("/order")
+                }
+            },
+        });
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let input = e.target.value.replace(/\D/g, "")
@@ -31,16 +80,13 @@ export const CheckoutPage = () => {
 
         setValueinput(formatted.trim())
     }
-
-    const cards = JSON.parse(localStorage.getItem("cards") || "[]")
-
-    const AllPrice = cards.reduce((total: number, item: any) => {
-        const price = Number(item.price.toString().replace(/[^\d.-]/g, ""));
-        return total + price * (item.count || 1);
-    }, 0);
+    const total = cards?.reduce(
+        (sum: number, item: any) => sum + item.price * item.quantity,
+        0
+    );
 
     return (
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex items-center pt-3.5">
                 <button type="button" onClick={() => navigate("/cart")} className="cursor-pointer">
                     <ArrowLeft />
@@ -52,17 +98,17 @@ export const CheckoutPage = () => {
 
             <div className="flex items-center justify-between pt-5">
                 <h4 className="font-semibold text-base text-secondColor">Buyurtma</h4>
-                <p className="text-sm text-placeholderColor">{cards.length} ta mahsulot</p>
+                <p className="text-sm text-placeholderColor">{cards?.length} ta mahsulot</p>
             </div>
 
             <div className="border rounded-2xl p-4 flex flex-col gap-4 mt-2.5">
-                {cards.map((item: any, idx: number) => (
+                {cards?.map((item: any, idx: number) => (
                     <div key={idx} className="flex gap-[11px] items-center">
-                        <img className="h-[89px] object-contain" src={item.image} alt="" />
+                        <img className="h-[89px] w-[67px] object-contain" src={`${item.image}`} alt="" />
                         <div className="flex flex-col gap-2">
                             <h3 className="font-medium text-sm text-secondColor">{item.title}</h3>
                             <h5 className="font-semibold text-mainColor">{item.price}</h5>
-                            <h3 className="text-xs text-placeholderColor">Miqdor: {item.count}</h3>
+                            <h3 className="text-xs text-placeholderColor">Miqdor: {item.quantity}</h3>
                         </div>
                     </div>
                 ))}
@@ -73,6 +119,7 @@ export const CheckoutPage = () => {
                 <div className="flex flex-col gap-[5px]">
                     <label className="text-sm leading-5">Ism va familiya</label>
                     <Input
+                        {...register("full_name", { required: "Ism kiritlishi majburiy" })}
                         className="h-12 rounded-[12px] placeholder:text-base"
                         placeholder="Ismingizni kiriting"
                     />
@@ -82,6 +129,7 @@ export const CheckoutPage = () => {
                     <label className="text-sm leading-5">Telefon raqam</label>
                     <Input
                         type="tel"
+                        {...register("phone", { required: "Phone kiritlishi majburiy" })}
                         value={valueinput}
                         onChange={handleChange}
                         className="h-12 rounded-[12px] placeholder:text-base"
@@ -89,16 +137,41 @@ export const CheckoutPage = () => {
                     />
                 </div>
 
-                <div className="flex flex-col gap-[5px]">
-                    <label className="text-sm leading-5">Manzil</label>
-                    <textarea
-                        className="border h-[74px] rounded-[12px] px-4 pt-2.5"
-                        placeholder="Viloyat, tuman, ko’cha va uy raqami"
-                    />
-                </div>
+                {addresses?.length === 0 ? (
+                    <Button
+                        type="button"
+                        onClick={() => navigate("/location")}
+                        variant="outline"
+                        className="border-none w-[140px] h-5 text-lg leading-5 text-mainColor"
+                    >
+                        <Plus /> Manzil kiritish
+                    </Button>
+                ) : (
+                    <div className="flex flex-col gap-2.5">
+                        <h2 className="font-semibold text-base text-secondColor pt-7.5">
+                            Yetkazib berish
+                        </h2>
+                        {addresses?.map((item: any) => (
+                            <div key={item.id} className="border rounded-lg pr-2 pt-2 pb-5 pl-[18px] flex justify-between" >
+                                <div className="pt-3">
+                                    <h3 className="font-semibold text-secondColor capitalize">
+                                        {item?.street ?? "Ko‘cha kiritilmagan"} tumani,
+                                    </h3>
+                                    <p className="text-placeholderColor flex items-center text-sm">
+                                        {item?.entrance && <span>{item.entrance}</span>}
+                                        {item?.floor && (<> <Dot size={16} /> <span>{item.floor}</span> </>)}
+                                        {item?.apartment_number && (<> <Dot size={16} /> <span>{item.apartment_number}</span> </>)}
+                                    </p>
+                                </div>
+                                <Button onClick={() => navigate("/location", { state: { address: item } })} className="w-9 h-9" variant={"outline"}><PencilLine className="w-4! h-4!" /></Button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
             </div>
 
-            <div>
+            {/* <div>
                 <h3 className="font-semibold text-base text-secondColor pt-7.5 pb-2.5">
                     Yetkazib berish turi
                 </h3>
@@ -138,74 +211,45 @@ export const CheckoutPage = () => {
                     />
                     <span className="text-sm text-secondColor">O‘zi olib ketish</span>
                 </label>
-            </div>
+            </div> */}
 
             <div className="pb-40">
                 <h3 className="font-semibold text-base text-secondColor pt-7.5 pb-2.5">
                     To’lov turi
                 </h3>
-
-                <label
-                    htmlFor="payment"
-                    className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer ${paymentType === "payment"
-                        ? "border-mainColor/50 bg-imgBgColor"
-                        : "border-borderColor"
-                        }`}>
-                    <input
-                        id="payment"
-                        type="radio"
-                        name="paymentType"
-                        value="payment"
-                        checked={paymentType === "payment"}
-                        onChange={() => setValue("paymentType", "payment")}
-                        className="w-[18px] h-[18px] accent-mainColor"
-                    />
-                    <span className="text-sm text-secondColor">Kartaga pul o’tkazish</span>
-                </label>
-
-                <label
-                    htmlFor="payme"
-                    className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${paymentType === "payme"
-                        ? "border-mainColor/50 bg-imgBgColor"
-                        : "border-borderColor"
-                        }`}>
-                    <input
-                        id="payme"
-                        type="radio"
-                        name="paymentType"
-                        value="payme"
-                        checked={paymentType === "payme"}
-                        onChange={() => setValue("paymentType", "payme")}
-                        className="w-[18px] h-[18px] accent-mainColor"
-                    />
-                    <span className="text-sm text-secondColor">Payme</span>
-                </label>
-                
-                <label
-                    htmlFor="click"
-                    className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${paymentType === "click"
-                        ? "border-mainColor/50 bg-imgBgColor"
-                        : "border-borderColor"
-                        }`}>
-                    <input
-                        id="click"
-                        type="radio"
-                        name="paymentType"
-                        value="click"
-                        checked={paymentType === "click"}
-                        onChange={() => setValue("paymentType", "click")}
-                        className="w-[18px] h-[18px] accent-mainColor"
-                    />
-                    <span className="text-sm text-secondColor">Click</span>
-                </label>
+                {["card", "payme", "click"].map((type) => (
+                    <label
+                        key={type}
+                        htmlFor={type}
+                        className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${paymentType === type
+                            ? "border-mainColor/50 bg-imgBgColor"
+                            : "border-borderColor"
+                            }`}
+                    >
+                        <input
+                            id={type}
+                            type="radio"
+                            value={type}
+                            {...register("paymentType")}
+                            className="w-[18px] h-[18px] accent-mainColor"
+                        />
+                        <span className="text-sm text-secondColor">
+                            {type === "card"
+                                ? "Kartaga pul o’tkazish"
+                                : type === "payme"
+                                    ? "Payme"
+                                    : "Click"}
+                        </span>
+                    </label>
+                ))}
             </div>
 
             <div className={` px-[22px] py-2.5 border rounded-t-[20px] bottom-0 left-0 w-full bg-white fixed z-40`}>
                 <div className="flex items-center justify-between w-full">
                     <h3 className="font-semibold text-[18px]">Jami:</h3>
-                    <p className="font-semibold text-[18px]"> {AllPrice.toLocaleString("uz-UZ")}so‘m</p>
+                    <p className="font-semibold text-[18px]">{total?.toLocaleString("uz-UZ")} so‘m</p>
                 </div>
-                <Button type="button" onClick={() => navigate("/payment")} className="w-full mt-2.5">Buyurtmani tasdiqlash va to’lash</Button>
+                <Button type="submit" className="w-full mt-2.5">Buyurtmani tasdiqlash va to’lash</Button>
             </div>
         </form>
     )

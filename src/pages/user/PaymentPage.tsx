@@ -1,32 +1,64 @@
-import { ArrowLeft, CloudUpload, Copy, Trash2 } from "lucide-react"
-import { useNavigate } from "react-router-dom"
-import { humo } from "../../assets/img"
-import { useRef, useState } from "react"
-import { Button } from "../../components/ui/button"
+import { ArrowLeft, CloudUpload, Copy, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { humo } from "../../assets/img";
+import { useRef, useState } from "react";
+import { Button } from "../../components/ui/button";
+import { useForm } from "react-hook-form";
+import { useGetOrders, usePostOrdersUpload } from "../../hooks";
 
 export const PaymentPage = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [preview, setPreview] = useState<string | null>(null);
+    const [coverImage, setCoverImage] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    const { data: orders } = useGetOrders();
+    const latestOrder = orders
+        ?.slice()
+        .sort((a:any, b:any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+
+    const id = latestOrder?.id;
+    const { mutate: uploadProof } = usePostOrdersUpload(id);
+
+    const { handleSubmit, reset } = useForm();
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const url = URL.createObjectURL(file);
             setPreview(url);
+            setCoverImage(file);
         }
     };
 
     const handleRemove = () => {
         setPreview(null);
+        setCoverImage(null);
         if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
     const handleClick = () => {
         fileInputRef.current?.click();
     };
+
+    const onSubmit = () => {
+        if (!coverImage) return alert("Chek rasmini yuklang 📸");
+        if (!id) return alert("Buyurtma ID topilmadi ❌");
+
+        const formData = new FormData();
+        formData.append("payment_proof", coverImage);
+        formData.append("id", id);
+
+        uploadProof(formData, {
+            onSuccess: () => {
+                reset();
+                navigate("/order");
+            },
+        });
+    };
+
     return (
-        <div >
+        <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col pb-20">
             <div className="flex items-center pt-3.5">
                 <button type="button" onClick={() => navigate("/checkout")} className="cursor-pointer">
                     <ArrowLeft />
@@ -35,6 +67,7 @@ export const PaymentPage = () => {
                     Kartadan pul o’tkazish
                 </h3>
             </div>
+
             <div className="pt-7.5">
                 <h2 className="font-semibold text-base text-secondColor">Qabul qiluvchi</h2>
                 <div className="border border-inputBorderColor rounded-[12px] p-4 mt-2.5">
@@ -47,9 +80,15 @@ export const PaymentPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="pt-[42px]">
+
+            <div className="pt-[42px] pb-4">
                 <h3 className="font-semibold text-base text-secondColor">Chekni yuklang</h3>
-                <div className={`relative rounded-[15px] flex items-center justify-center overflow-hidden ${!preview ? "border border-inputBorderColor h-[90px] w-[123px] mt-2.5" : "h-[130px] w-32 pb-4"}`}>
+                <div
+                    className={`relative rounded-[15px] flex items-center justify-center overflow-hidden ${!preview
+                        ? "border border-inputBorderColor h-[90px] w-[123px] mt-2.5"
+                        : "h-[130px] w-32 pb-4"
+                        }`}
+                >
                     {preview ? (
                         <>
                             <img
@@ -58,6 +97,7 @@ export const PaymentPage = () => {
                                 className="w-[123px] h-[98px] object-cover rounded-[15px]"
                             />
                             <button
+                                type="button"
                                 onClick={handleRemove}
                                 className="w-[34px] h-[34px] border border-inputBorderColor rounded-full top-0 right-0 absolute bg-white flex items-center justify-center"
                             >
@@ -83,9 +123,12 @@ export const PaymentPage = () => {
                     />
                 </div>
             </div>
-            <Button className="w-full mt-[183px]">Jo’natish</Button>
-        </div>
-    )
-}
 
-export default PaymentPage
+            <Button type="submit" className="w-full mt-auto">
+                Jo’natish
+            </Button>
+        </form>
+    );
+};
+
+export default PaymentPage;

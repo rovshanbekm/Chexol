@@ -8,6 +8,8 @@ import { Controller } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import { usePostUsers } from "../../hooks/useUsers"
 import { getTelegramUserDataID } from "../../services/get_init_data_user_id"
+import useStore from "../../context/store"
+import { toast } from "react-toastify"
 
 type FormValues = {
     full_name?: string;
@@ -20,30 +22,38 @@ type FormValues = {
 
 export const Signup = () => {
     const { handleSubmit, reset, control, register } = useForm<FormValues>({
-        defaultValues: { username: "", password: "", region: "" }
+        defaultValues: { full_name: "", phone: "", region: "" }
     })
     const navigate = useNavigate()
     const { data: regions } = useGetRegions()
     const { mutate: createUsers } = usePostUsers()
     const chat_id = getTelegramUserDataID()
+    const {login} = useStore()
 
     const onSubmit = (data: FormValues) => {
         const payload = {
-            username: data.username,
-            password: data.password,
+            full_name: data.full_name,
+            phone: data.phone,
             region: data.region,
             chat_id: chat_id,
         };
 
         createUsers(payload, {
-            onSuccess: () => {
+            onSuccess: (res) => {
+                const access_token = res.tokens?.access_token;
+                const refresh_token = res.tokens?.refresh_token;
                 reset({
-                    username: "",
-                    password: "",
+                    full_name: "",
+                    phone: "",
                     region: "",
                 });
-                navigate("/verify")
+                login({ access_token, refresh_token });
+                navigate("/")
             },
+            onError: () => {
+                toast.error("token saqlanmadi");
+                
+            }
         });
     };
 
@@ -54,7 +64,7 @@ export const Signup = () => {
                 <div className="flex flex-col gap-[5px]">
                     <label className="text-base leading-5 text-secondColor">Ism</label>
                     <Input
-                        {...register("username", { required: "Username kiritlishi majburiy" })}
+                        {...register("full_name", { required: "Ism kiritlishi majburiy" })}
                         className="placeholder:text-base placeholder:text-placeholderColor py-3 px-4 focus-visible:ring-0 h-12 focus-visible:border-inputBorderColor! border-inputBorderColor shadow-none "
                         placeholder="Ismingizni kiriting"
                     />
@@ -62,7 +72,7 @@ export const Signup = () => {
                 <div className="flex flex-col gap-[5px]">
                     <label className="text-base leading-5 text-secondColor">Telefon raqam</label>
                     <Input
-                        {...register("password", { required: "Password kiritlishi majburiy" })}
+                        {...register("phone", { required: "Phone kiritlishi majburiy" })}
                         className="placeholder:text-base placeholder:text-placeholderColor py-3 px-4 focus-visible:ring-0 h-12 focus-visible:border-inputBorderColor! border-inputBorderColor shadow-none"
                         placeholder="+998(99) 888 90 98"
                     />

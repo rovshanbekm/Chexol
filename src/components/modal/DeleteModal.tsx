@@ -1,3 +1,4 @@
+import useStore from "../../context/store";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
 
 interface DeleteModalProps {
@@ -6,6 +7,11 @@ interface DeleteModalProps {
 }
 
 export const DeleteModal = ({ open, toggleOpen }: DeleteModalProps) => {
+    const { logout } = useStore()
+    const handleDelete = () => {
+        toggleOpen();
+        logout()
+    }
     return (
         <AlertDialog open={open} onOpenChange={toggleOpen} >
             <AlertDialogContent className="flex flex-col gap-5 p-5! rounded-[15px] w-[366px]!">
@@ -17,7 +23,7 @@ export const DeleteModal = ({ open, toggleOpen }: DeleteModalProps) => {
                 </AlertDialogHeader>
                 <AlertDialogFooter className="grid grid-cols-2 ">
                     <AlertDialogCancel className="w-full rounded-[12px]! cursor-pointer">Yo'q</AlertDialogCancel>
-                    <AlertDialogAction className="rounded-[12px]! bg-deleteBtnColor cursor-pointer">Ha</AlertDialogAction>
+                    <AlertDialogAction onClick={handleDelete} className="rounded-[12px]! bg-deleteBtnColor! hover:bg-deleteBtnColor/85! cursor-pointer">Ha</AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

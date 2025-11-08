@@ -1,45 +1,36 @@
+// utils/sessionStore.ts
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
-export interface FormState {
-    pageSearch: number;
-    setPageSearch: (page: number) => void;
+interface SessionState {
+  settingsCategoryTab: string | null;
+  setSettingsCategoryTab: (value: string | null) => void;
 
-    pageCatalog: number;
-    setPageCatalog: (page: number) => void;
+  settingsMaterialTab: string | null;
+  setSettingsMaterialTab: (value: string | null) => void;
 
-    // Eski sahifalar uchun (2 ta tab)
-    rowCol: boolean;
-    toggleRowCol: (value?: boolean) => void;
+  settingsColorTab: string | null;
+  setSettingsColorTab: (value: string | null) => void;
 
-    // Hozirgi sahifa uchun (3 ta tab)
-    settingsTab: "all" | "phonecase" | "earphones" | "phonecharger";
-    setSettingsTab: (tab: "all" | "phonecase" | "earphones" | "phonecharger") => void;
+  activeFilter: string | null;
+  setActiveFilter: (value:string | null) => void
 }
 
-export const sessionStore = create<FormState>()(
-    persist(
-        (set) => ({
-            // Default qiymatlar
-            rowCol: false,
-            pageCatalog: 1,
-            pageSearch: 1,
-            settingsTab: "all",
+const sessionStore = create<SessionState>()(
+  persist(
+    (set) => ({
+      settingsCategoryTab: null,
+      setSettingsCategoryTab: (value) => set({ settingsCategoryTab: value }),
 
-            // Funksiyalar
-            setPageCatalog: (page: number) => set({ pageCatalog: page }),
-            setPageSearch: (page: number) => set({ pageSearch: page }),
-            toggleRowCol: (value?: boolean) =>
-                set((state) => ({
-                    rowCol: typeof value === "boolean" ? value : !state.rowCol,
-                })),
-            setSettingsTab: (tab) => set({ settingsTab: tab }),
-        }),
-        {
-            name: "sector-session",
-            storage: createJSONStorage(() => sessionStorage),
-        }
-    )
+      settingsMaterialTab: null,
+      setSettingsMaterialTab: (value) => set({ settingsMaterialTab: value }),
+      settingsColorTab: null,
+      setSettingsColorTab: (value) => set({ settingsColorTab: value }),
+      activeFilter: null,
+      setActiveFilter: (filter) => set({ activeFilter: filter })
+    }),
+    { name: "session-storage" }
+  )
 );
 
 export default sessionStore;

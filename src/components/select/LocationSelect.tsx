@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
-import { useGetRegions } from "../../hooks/useRegions"
+import { useGetRegions } from "../../hooks"
 
 export const LocationSelect = () => {
     const { data: regions } = useGetRegions()    

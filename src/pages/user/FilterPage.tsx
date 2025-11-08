@@ -2,10 +2,26 @@ import { useState } from "react";
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input";
 import { Checkbox } from "../../components/ui/checkbox";
+import sessionStore from "../../utils/sessionStore";
+import { useGetCategories, useGetColors, useGetMaterials } from "../../hooks";
+import { useNavigate } from "react-router-dom";
 export const FilterPage = () => {
+    const navigate = useNavigate();
     const [minValue, setMinValue] = useState("");
     const [maxValue, setMaxValue] = useState("");
-    const [selected, setSelected] = useState("discounted");
+    const [selected, setSelected] = useState<"discounted" | "not-discounted" | null>(null);
+
+    const settingsCategoryTab = sessionStore((state) => state.settingsCategoryTab);
+    const setSettingsCategoryTab = sessionStore((state) => state.setSettingsCategoryTab);
+    const settingsMaterialTab = sessionStore((state) => state.settingsMaterialTab);
+    const setSettingsMaterialTab = sessionStore((state) => state.setSettingsMaterialTab);
+    const settingsColorTab = sessionStore((state) => state.settingsColorTab);
+    const setSettingsColorTab = sessionStore((state) => state.setSettingsColorTab);
+    const setActiveFilter = sessionStore((state) => state.setActiveFilter);
+
+    const { data: categories, isLoading } = useGetCategories();
+    const { data: materials } = useGetMaterials();
+    const { data: colors } = useGetColors();
 
     const formatNumber = (value: any) => {
         const onlyNums = value.replace(/[^0-9]/g, "");
@@ -14,34 +30,89 @@ export const FilterPage = () => {
 
     const handleMinChange = (e: any) => setMinValue(formatNumber(e.target.value));
     const handleMaxChange = (e: any) => setMaxValue(formatNumber(e.target.value));
+
+    const handleFilter = () => {
+        const filterData = {
+            category_id: settingsCategoryTab,
+            material_id: settingsMaterialTab,
+            color_id: settingsColorTab,
+            is_discounted: selected === "discounted",
+            is_new: selected === "not-discounted",
+            min_price: minValue ? Number(minValue.replace(/,/g, "")) : null,
+            max_price: maxValue ? Number(maxValue.replace(/,/g, "")) : null,
+        };
+
+        setActiveFilter(JSON.stringify(filterData));
+        navigate("/");
+    };
+
+    const handleReset = () => {
+        setMinValue("");
+        setMaxValue("");
+        setSelected(null);
+        setSettingsCategoryTab(null);
+        setSettingsMaterialTab(null);
+        setSettingsColorTab(null);
+
+        setActiveFilter(null);
+        navigate("/");
+    };
+
     return (
-        <div className="pt-5 flex flex-col gap-5 mb-20">
+        <div className="pt-5 flex flex-col gap-5 pb-20">
             <h2 className="font-semibold text-[20px] text-secondColor">Filter</h2>
-            <div className="flex flex-col gap-[11px] ">
+            <div className="flex flex-col gap-[11px]">
                 <h4 className="font-semibold text-base text-secondColor">Turi</h4>
-                <div className="flex gap-2 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                    <Button>G’ilof</Button>
-                    <Button variant={"secondary"}>Quloqchin</Button>
-                    <Button variant={"secondary"}>Quvvatlagich</Button>
+                <div className="flex items-center gap-1.5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+                    {!isLoading &&
+                        categories?.map((cat: any) => (
+                            <button
+                                key={cat.id}
+                                onClick={() => setSettingsCategoryTab(cat.slug || cat.id)}
+                                className={`h-12 rounded-[20px] py-[13.5px] px-[15px] border font-medium text-sm cursor-pointer ${settingsCategoryTab === (cat.slug || cat.id)
+                                    ? "bg-mainColor text-white"
+                                    : "bg-white text-secondColor"
+                                    }`}
+                            >
+                                {cat.name}
+                            </button>
+                        ))}
                 </div>
             </div>
             <div className="flex flex-col gap-[11px] ">
                 <h4 className="font-semibold text-base text-secondColor">Material</h4>
-                <div className="flex gap-2 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                    <Button>Silikon</Button>
-                    <Button variant={"secondary"}>PLastmassa</Button>
-                    <Button variant={"secondary"}>Charm</Button>
-                    <Button variant={"secondary"}>Shaffof</Button>
+                <div className="flex items-center gap-1.5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+                    {!isLoading &&
+                        materials?.map((material: any) => (
+                            <button
+                                key={material.id}
+                                onClick={() => setSettingsMaterialTab(material.slug || material.id)}
+                                className={`h-12 rounded-[20px] py-[13.5px] px-[15px] border font-medium text-sm cursor-pointer ${settingsMaterialTab === (material.slug || material.id)
+                                    ? "bg-mainColor text-white"
+                                    : "bg-white text-secondColor"
+                                    }`}
+                            >
+                                {material.name}
+                            </button>
+                        ))}
                 </div>
             </div>
             <div className="flex flex-col gap-[11px]">
                 <h4 className="font-semibold text-base text-secondColor">Rang</h4>
-                <div className="flex gap-2 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                    <Button>Oq</Button>
-                    <Button variant={"secondary"}>Qora</Button>
-                    <Button variant={"secondary"}>Ko'k</Button>
-                    <Button variant={"secondary"}>Qizil</Button>
-                    <Button variant={"secondary"}>Yashil</Button>
+                <div className="flex items-center gap-1.5 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+                    {!isLoading &&
+                        colors?.map((color: any) => (
+                            <button
+                                key={color.id}
+                                onClick={() => setSettingsColorTab(color.slug || color.id)}
+                                className={`h-12 rounded-[20px] py-[13.5px] px-[15px] border font-medium text-sm cursor-pointer ${settingsColorTab === (color.slug || color.id)
+                                    ? "bg-mainColor text-white"
+                                    : "bg-white text-secondColor"
+                                    }`}
+                            >
+                                {color.name}
+                            </button>
+                        ))}
                 </div>
             </div>
             <div className="flex flex-col gap-[11px]">
@@ -89,8 +160,8 @@ export const FilterPage = () => {
                 </div>
             </div>
             <div className="grid grid-cols-2 gap-2.5">
-                <Button className="bg-white! border border-inputBorderColor! text-secondColor!">Tozalash</Button>
-                <Button>Filterlash</Button>
+                <Button onClick={handleReset} className="bg-white! border border-inputBorderColor! text-secondColor!">Tozalash</Button>
+                <Button onClick={handleFilter}>Filterlash</Button>
             </div>
         </div>
     )

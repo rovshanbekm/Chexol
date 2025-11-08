@@ -15,6 +15,7 @@ const CheckoutPage = lazy(() => import('./pages/user/CheckoutPage'))
 const PaymentPage = lazy(() => import('./pages/user/PaymentPage'))
 const OrderHistoryPage = lazy(() => import('./pages/user/OrderHistoryPage'))
 const CashbackPage = lazy(() => import('./pages/user/CashbackPage'))
+const LocationPage = lazy(() => import('./pages/user/LocationPage'))
 
 const withSuspense = (el: JSX.Element) => (
     <Suspense fallback={<div></div>}>{el}</Suspense>
@@ -72,11 +73,15 @@ const router = createBrowserRouter([
             {
                 path: "cashback",
                 element: withSuspense(<CashbackPage />)
+            },
+            {
+                path: "location",
+                element: withSuspense(<LocationPage />)
             }
         ]
     },
     {
-        path: "/cart/:id",
+        path: "/products/:id",
         element: withSuspense(<CartDetailPage />),
     },
 ])

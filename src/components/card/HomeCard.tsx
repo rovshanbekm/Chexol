@@ -1,46 +1,98 @@
-import { ShoppingCart } from "lucide-react"
-import { Button } from "../ui/button"
-import { Link } from "react-router-dom"
-import { data } from "../../data/card-data"
-import { toast } from "react-toastify"
+import { ShoppingCart } from "lucide-react";
+import { Button } from "../ui/button";
+import { Link } from "react-router-dom";
+import { useGetFilteredProducts, useGetProducts } from "../../hooks/useProducts";
+import sessionStore from "../../utils/sessionStore";
+import { usePostCart } from "../../hooks";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
+type FormValues = {
+    product_id: string;
+    quantity: number;
+};
 
 export const HomeCard = () => {
+    const { reset } = useForm<FormValues>({
+        defaultValues: { product_id: "", quantity: 1 },
+    });
 
-    const handleSave = (item:any) => {
-        const saved = JSON.parse(localStorage.getItem("cards") || "[]");
-        const alreadyExists = saved.some((el:any) => el.id === item.id);
+    const settingsCategoryTab = sessionStore((state) => state.settingsCategoryTab);
+    const activeFilter = sessionStore((state) => state.activeFilter);
+    const selectedColors = JSON.parse(localStorage.getItem("selectedColors") || "{}");
 
-        if (!alreadyExists) {
-            const newItem = { ...item, count: 1 };
-            saved.push(newItem);
-            localStorage.setItem("cards", JSON.stringify(saved));
-            toast.success("Mahsulot qo'shildi!");
-        } else {
-            toast.info("Bu mahsulot allaqachon saqlangan!");
-        }
+    const { mutate: createBuskets } = usePostCart();
+
+    const parsedActiveFilter = activeFilter ? JSON.parse(activeFilter) : {};
+
+    const filterParams = {
+        ...parsedActiveFilter,
+        category_id:
+            settingsCategoryTab !== "all"
+                ? settingsCategoryTab
+                : parsedActiveFilter?.category_id,
+        enabled: true,
+    };
+
+    const { data: filteredProducts } = useGetFilteredProducts(filterParams);
+    const { data: allProducts } = useGetProducts();
+
+    const list =
+        filteredProducts?.length || settingsCategoryTab || activeFilter
+            ? filteredProducts
+            : allProducts;
+
+    const handleAddToCart = (e: React.MouseEvent, productId: string, item:any) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const payload = {
+            product_id: productId,
+            quantity: 1,
+            ...(selectedColors[item.id] && { color: selectedColors[item.id] })
+        };
+
+        createBuskets(payload, {
+            onSuccess: () => {
+                reset();
+                toast.success("Mahsulot savatga qo'shildi");
+            },
+        });
     };
 
     return (
         <div className="grid grid-cols-2 gap-2.5 pt-5">
-            {data.map((data) => (
-                <Link to={`/cart/${data.id}`}>
-                    <img className="bg-imgBgColor w-full object-contain h-[198px] rounded-t-[20px]" src={data.image} alt="" />
+            {list?.map((item: any) => (
+                <Link to={`/products/${item.id}`} key={item.id}>
+                    <img
+                        className="w-full object-contain rounded-t-[20px]"
+                        src={`${import.meta.env.VITE_API_URL}${item?.image}`}
+                        alt={item?.title}
+                    />
                     <div className="flex flex-col gap-2.5 border-x border-b p-2.5 rounded-b-[12px]">
-                        <h2 className="font-medium text-sm text-secondColor">{data.title}</h2>
-                        <p className="text-[12px] text-placeholderColor">{data.description}</p>
+                        <h2 className="font-medium text-sm text-secondColor line-clamp-1">
+                            {item?.title}
+                        </h2>
+                        <p className="text-[12px] text-placeholderColor line-clamp-1">
+                            {item?.description}
+                        </p>
                         <div className="flex items-center justify-between">
-                            <h4 className="font-semibold text-base text-mainColor">{data.price}so‘m</h4>
-                            <Button onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();    
-                                handleSave(data);
-                            }} className="w-[42px]! z-10 h-[42px]! rounded-[12px]!"><ShoppingCart /></Button>
+                            <h4 className="font-semibold text-base text-mainColor">
+                                {item?.price} so‘m
+                            </h4>
+                            <Button
+                                type="button"
+                                onClick={(e) => handleAddToCart(e, item.id, item)}
+                                className="w-[42px]! h-[42px]! rounded-[12px]!"
+                            >
+                                <ShoppingCart />
+                            </Button>
                         </div>
                     </div>
                 </Link>
             ))}
         </div>
-    )
-}
+    );
+};
 
-export default HomeCard
+export default HomeCard;
