@@ -35,24 +35,23 @@ export const useGetProducts = () => {
 };
 
 
-export const useGetProductsById = (id: string) => {
+export const useGetProductsById = (id: string | undefined, colorId?: string) => {
     return useQuery({
-        queryKey: ["products", id],
-
+        queryKey: ["products", id, colorId],
         queryFn: async () => {
-            try {
-                const res = await request.get(
-                    `${PRODUCTS}${id}/`
-                );
-                return res?.data ?? [];
+            if (!id) return null;
 
+            try {
+                const url = colorId ? `${PRODUCTS}${id}/?color_id=${colorId}` : `${PRODUCTS}${id}/`;
+                const res = await request.get(url);
+                return res?.data ?? null;
             } catch (error) {
-                console.log(error);
-                toast.error("Yangi xabar qidirishda xatolik");
-                return []
+                console.error(error);
+                toast.error("Mahsulot ma'lumotlarini olishda xatolik yuz berdi");
+                return null;
             }
         },
-        staleTime: 1000 * 60 * 60,
+        staleTime: 1000 * 60 * 5,
     });
 };
 

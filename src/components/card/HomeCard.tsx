@@ -3,26 +3,22 @@ import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetFilteredProducts, useGetProducts } from "../../hooks/useProducts";
 import sessionStore from "../../utils/sessionStore";
-import { usePostCart } from "../../hooks";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 
-type FormValues = {
-    product_id: string;
-    quantity: number;
-};
+// type FormValues = {
+//     product_id: string;
+//     quantity: number;
+// };
 
 export const HomeCard = () => {
-    const { reset } = useForm<FormValues>({
-        defaultValues: { product_id: "", quantity: 1 },
-    });
+    // const { reset } = useForm<FormValues>({
+    //     defaultValues: { product_id: "", quantity: 1 },
+    // });
 
     const navigate = useNavigate()
     const settingsCategoryTab = sessionStore((state) => state.settingsCategoryTab);
     const activeFilter = sessionStore((state) => state.activeFilter);
-    const selectedColors = JSON.parse(localStorage.getItem("selectedColors") || "{}");
 
-    const { mutate: createBuskets } = usePostCart();
+    // const { mutate: createBuskets } = usePostCart();
 
     const parsedActiveFilter = activeFilter ? JSON.parse(activeFilter) : {};
 
@@ -43,24 +39,24 @@ export const HomeCard = () => {
             ? filteredProducts
             : allProducts;
 
-    const handleAddToCart = (e: React.MouseEvent, productId: string, item: any) => {
-        e.preventDefault();
-        e.stopPropagation();
+    // const handleAddToCart = (e: React.MouseEvent, productId: string, item: any) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
 
-        const payload = {
-            product_id: productId,
-            quantity: 1,
-            color: selectedColors[item.id]
-        };
+    //     const payload = {
+    //         product_id: productId,
+    //         quantity: 1,
+    //         color: item?.colors?.length ? item.colors[0].color : "",
+    //     };
 
-        createBuskets(payload, {
-            onSuccess: () => {
-                reset();
-                toast.success("Mahsulot savatga qo'shildi");
-            },
-        });
-        navigate("/cart")
-    };
+    //     createBuskets(payload, {
+    //         onSuccess: () => {
+    //             reset();
+    //             toast.success("Mahsulot savatga qo'shildi");
+    //         },
+    //     });
+    //     navigate("/cart")
+    // };
 
     return (
         <div className="grid grid-cols-2 gap-2.5 pt-5">
@@ -84,7 +80,7 @@ export const HomeCard = () => {
                             </h4>
                             <Button
                                 type="button"
-                                onClick={(e) => handleAddToCart(e, item.id, item)}
+                                onClick={() => navigate(`${`/products/${item.id}`}`)}
                                 className="w-[42px]! h-[42px]! rounded-[12px]!"
                             >
                                 <ShoppingCart />

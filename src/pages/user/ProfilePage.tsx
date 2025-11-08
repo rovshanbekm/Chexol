@@ -88,7 +88,7 @@ export const ProfilePage = () => {
                     <h3 className="text-lg text-secondColor">Keshbek</h3>
                   </div>
                   <div className="flex items-center gap-[18px]">
-                    <h4 className="text-mainColor font-medium text-sm">+1 345 so’m</h4>
+                    {/* <h4 className="text-mainColor font-medium text-sm">+1 345 so’m</h4> */}
                     <ChevronRight className="text-placeholderColor" />
                   </div>
                 </button>

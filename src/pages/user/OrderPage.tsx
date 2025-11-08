@@ -20,7 +20,7 @@ export const OrderPage = () => {
           Buyurtmalar
         </h3>
       </div>
-      {orders?.items?.length === 0 ? (
+      {orders?.length === 0 ? (
         <div className="flex items-center justify-center flex-col pt-[185px]">
           <ArchiveX size={76} className="text-iconColor mb-5" />
           <div className="flex flex-col gap-0.5">

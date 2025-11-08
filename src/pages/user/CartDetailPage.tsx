@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { useForm } from "react-hook-form";
-import { useGetColors, useGetProductsById, usePostCart } from "../../hooks";
+import { useGetProductsById, usePostCart } from "../../hooks";
 
 type FormValues = {
     product_id?: string;
@@ -15,22 +15,29 @@ export const CartDetailPage = () => {
     const { handleSubmit, reset, setValue } = useForm<FormValues>({
         defaultValues: { product_id: "", quantity: 0, color: "", },
     });
+    const [selectedColor, setSelectedColor] = useState("");
     const { id } = useParams();
-    const { data: productsById } = useGetProductsById(id as string);
+    const { data: productsById } = useGetProductsById(id, selectedColor);
     const { mutate: createBuskets } = usePostCart();
-    const { data: colors } = useGetColors();
     const [count, setCount] = useState(1);
     const [mainImage, setMainImage] = useState(productsById?.image);
     const navigate = useNavigate();
-    const [selectedColor, setSelectedColor] = useState("");
 
     useEffect(() => {
         setValue("quantity", count);
     }, [count, setValue]);
 
     useEffect(() => {
-        setMainImage(productsById?.image);
-    }, [productsById?.image]);
+        if (!selectedColor) return setMainImage(productsById?.image);
+
+        const matchedImage = productsById?.images?.find((img: any) => img.color === selectedColor);
+
+        if (matchedImage) {
+            setMainImage(matchedImage.image);
+        } else {
+            setMainImage(productsById?.image);
+        }
+    }, [selectedColor, productsById]);
 
     const onSubmit = () => {
         // let productIdToSend = productsById?.id;
@@ -44,14 +51,11 @@ export const CartDetailPage = () => {
         //     product_id: productIdToSend,
         //     quantity: count,
         // };
-        const savedColors = JSON.parse(localStorage.getItem("selectedColors") || "{}");
-        savedColors[productsById?.id] = selectedColor;
-        localStorage.setItem("selectedColors", JSON.stringify(savedColors));
 
         const payload = {
             product_id: productsById?.id,
             quantity: count,
-            color: selectedColor, 
+            color: selectedColor,
         };
 
         createBuskets(payload, {
@@ -81,14 +85,14 @@ export const CartDetailPage = () => {
                         alt=""
                     />
                     <div className="h-[102px] absolute top-10.5 right-2.5 w-9 rounded-[30px] bg-white flex flex-col items-center justify-center gap-3 p-2 shadow-md">
-                        {colors?.map((item: any) => {
-                            const isActive = selectedColor === item.id;
+                        {productsById?.colors?.map((item: any) => {
+                            const isActive = selectedColor === item.color;
 
                             return (
                                 <button
                                     key={item.id}
                                     type="button"
-                                    onClick={() => setSelectedColor(item.id)}
+                                    onClick={() => setSelectedColor(item.color)}
                                     className="relative w-4 h-4 rounded-full transition-all duration-200"
                                     style={{
                                         backgroundColor: item.hex_code || "#999",
@@ -150,7 +154,7 @@ export const CartDetailPage = () => {
                         <Plus className="text-mainColor" />
                     </button>
                 </div>
-                <Button type="submit" className="w-[236px] font-semibold text-base">
+                <Button type="submit" className="w-[214px] font-semibold text-base">
                     Savatga qo’shish
                 </Button>
             </div>
