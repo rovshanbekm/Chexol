@@ -114,7 +114,7 @@ export const ProfilePage = () => {
       )}
 
       {editing && (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col">
           <div className="flex items-center pt-3.5">
             <button type="button" onClick={() => setEditing(false)} className="cursor-pointer">
               <ArrowLeft />
