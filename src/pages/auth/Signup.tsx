@@ -15,6 +15,7 @@ import { usePostUsers } from "../../hooks/useUsers";
 import { getTelegramUserDataID } from "../../services/get_init_data_user_id";
 import useStore from "../../context/store";
 import { toast } from "react-toastify";
+import { setTokens } from "../../utils/token";
 
 type FormValues = {
     full_name: string;
@@ -69,6 +70,8 @@ export const Signup = () => {
             onSuccess: (res) => {
                 const access_token = res.tokens?.access_token;
                 const refresh_token = res.tokens?.refresh_token;
+                const user_id = res?.id || res?.user?.id;
+                setTokens({ access_token, refresh_token, user_id });
                 reset({ full_name: "", phone: "", region: "" });
                 login({ access_token, refresh_token });
                 navigate("/");

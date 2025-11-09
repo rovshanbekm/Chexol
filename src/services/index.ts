@@ -48,7 +48,6 @@ request.interceptors.response.use(
                 if (axios.isAxiosError(refreshError)) {
                     requestQueue.rejectAll(refreshError);
                     useStore.getState().logout();
-                    window.location.href = "/signup";
                     return Promise.reject(refreshError);
                 } else {
                     console.error("Error refreshing token:", refreshError);

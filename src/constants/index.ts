@@ -14,3 +14,5 @@ export const ORDERS = 'orders/'
 export const MY_CASHBACK = 'my_cashback/'
 export const MY_ADDRESS = 'my_addresses/'
 export const CREATE_ADDRESS = 'create_address/'
+export const USER_ID = 'user_id';
+export const LOGIN = `${DOMAIN}${USERS}login/`

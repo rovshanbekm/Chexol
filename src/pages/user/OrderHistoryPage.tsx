@@ -70,7 +70,7 @@ export const OrderHistoryPage = () => {
                                         </div>
                                         <div className="flex items-center justify-between pt-5">
                                             <p className="font-semibold text-base text-mainColor">
-                                                {item.price * item.quantity}
+                                                {item.price * item.quantity} so’m
                                             </p>
                                             <Button
                                                 onClick={() => {setOpen(true), setSelectedOrderId(order.id)}}

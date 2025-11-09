@@ -60,7 +60,7 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
                                     </div>
                                     <div className="flex gap-10">
                                         <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Mahsulot:</h4>
-                                        <p className="font-medium text-sm leading-6 text-secondColor flex gap-[5px] items-center">{item?.title} <X size={10} /> {item?.quantity}</p>
+                                        <p className="font-medium text-sm leading-6 text-secondColor flex gap-[5px] items-center"><span className="line-clamp-1">{item?.title}</span> <X size={10} /> {item?.quantity}</p>
                                     </div>
                                     <div className="flex gap-10">
                                         <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Manzil:</h4>

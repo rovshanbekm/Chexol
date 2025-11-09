@@ -143,12 +143,12 @@ export const CartDetailPage = () => {
                 </div>
             </div>
 
-            <div className="flex items-center px-[22px] py-2.5 border rounded-t-[20px] bottom-0 bg-white w-full justify-between fixed z-40">
+            <div className="flex items-center px-4 py-2.5 border rounded-t-[20px] bottom-0 bg-white w-full justify-between gap-2.5 fixed z-40">
                 <div className="flex items-center gap-[3px]">
                     <button
                         type="button"
                         onClick={handleMinus}
-                        className="w-8 border h-[34px] bg-white rounded-[8px] flex items-center justify-center"
+                        className="w-8 border h-[34px] bg-white cursor-pointer rounded-[8px] flex items-center justify-center"
                     >
                         <Minus className="text-mainColor" />
                     </button>
@@ -158,12 +158,12 @@ export const CartDetailPage = () => {
                     <button
                         type="button"
                         onClick={handlePlus}
-                        className="w-8 border h-[34px] bg-white rounded-[8px] flex items-center justify-center"
+                        className="w-8 border h-[34px] bg-white cursor-pointer rounded-[8px] flex items-center justify-center"
                     >
                         <Plus className="text-mainColor" />
                     </button>
                 </div>
-                <Button type="submit" className="w-[214px] font-semibold text-base">
+                <Button type="submit" className="2xs:!w-[190px] sm:!w-[214px] font-semibold text-base">
                     Savatga qo’shish
                 </Button>
             </div>

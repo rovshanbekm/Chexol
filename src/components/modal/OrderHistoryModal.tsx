@@ -30,7 +30,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                     <AlertDialogCancel className="border-none absolute right-0 top-0 h-10"><X /></AlertDialogCancel>
                     <AlertDialogHeader className="flex pt-2.5! text-start">
                         <AlertDialogTitle className="font-semibold text-xl text-modalTitleColor">
-                            Buyurtma tafsiloti
+                            To’lov tafsiloti
                         </AlertDialogTitle>
                         {orders?.items?.map((item: any) => (
                             <AlertDialogDescription key={item.id} className="flex items-start! flex-col gap-3 pt-3">
@@ -43,40 +43,40 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                                     <p className="font-medium text-sm leading-6 text-secondColor">{formatDate(orders.created_at)}</p>
                                 </div>
                                 <div className="flex gap-10">
+                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Mahsulot:</h4>
+                                    <p className="font-medium text-sm leading-6 text-secondColor flex gap-[5px] items-center"> <span className="line-clamp-1">{item?.title}</span> <X size={10} /> {item?.quantity}</p>
+                                </div>
+                                <div className="flex gap-10">
+                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">To'lov turi:</h4>
+                                    <p className="font-medium text-sm leading-6 text-secondColor capitalize">{orders.payment_type}</p>
+                                </div>
+                                <div className="flex gap-10">
+                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Summa:</h4>
+                                    <p className="font-medium text-sm leading-6 text-secondColor">{Number(item.price).toLocaleString("uz-UZ")} so'm</p>
+                                </div>
+                                <div className="flex gap-10">
                                     <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Holati:</h4>
                                     {orders.status === "delivered" ? (
-                                        <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">
+                                        <p className="text-xs rounded-[10px] flex items-center justify-center">
                                             Yetkazildi
                                         </p>
                                     ) : orders.status === "pending" ? (
-                                        <p className="text-xs text-pendingColorStatus px-2.5 h-[33px] bg-pendingColorStatus/7 rounded-[10px] flex items-center justify-center">
+                                        <p className="font-medium text-sm text-secondColor leading-6 flex items-center justify-center">
                                             Kutilmoqda
                                         </p>
                                     ) : orders.status === "in_progress" ? (
-                                        <p className="text-xs text-waitingStatus w-[82px] h-[33px] bg-waitingStatus/7 rounded-[10px] flex items-center justify-center">
+                                        <p className="font-medium text-sm text-secondColor leading-6 flex items-center justify-center">
                                             Tayyorlanmoqda
                                         </p>
                                     ) : orders.status === "on_the_way" ? (
-                                        <p className="text-xs text-onTheWayStatus w-[82px] h-[33px] bg-onTheWayStatus/7 rounded-[10px] flex items-center justify-center">
+                                        <p className="font-medium text-sm text-secondColor leading-6 flex items-center justify-center">
                                             Yetkazilmoqda
                                         </p>
                                     ) : (
-                                        <p className="text-xs text-logoutColor w-[82px] h-[33px] bg-logoutColor/7 rounded-[10px] flex items-center justify-center">
+                                        <p className="font-medium text-sm text-secondColor leading-6 flex items-center justify-center">
                                             Bekor qilindi
                                         </p>
                                     )}
-                                </div>
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Mahsulot:</h4>
-                                    <p className="font-medium text-sm leading-6 text-secondColor flex gap-[5px] items-center">{item?.title} <X size={10} /> {item?.quantity}</p>
-                                </div>
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Manzil:</h4>
-                                    <p className="font-medium text-sm leading-6 text-secondColor">Toshkent, Mirobod 12</p>
-                                </div>
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Treking:</h4>
-                                    <p className="font-medium text-sm leading-6 text-mainColor">{item.tricking_code}</p>
                                 </div>
                             </AlertDialogDescription>
                         ))}
