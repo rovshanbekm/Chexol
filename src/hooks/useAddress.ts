@@ -19,7 +19,6 @@ export const useGetAddress = () => {
                 return []
             }
         },
-        staleTime: 1000 * 60 * 60,
     });
 };
 

@@ -66,7 +66,7 @@ export const OrderPage = () => {
                     </div>
                     <div className="flex items-center justify-between pt-5">
                       <p className="font-semibold text-base text-mainColor">
-                        {item.price * item.quantity} so’m
+                        {Number(item.price * item.quantity).toLocaleString("uz-UZ")} so’m
                       </p>
                       <Button
                         onClick={() => {

@@ -19,6 +19,5 @@ export const useGetColors = () => {
                 return []
             }
         },
-        staleTime: 1000 * 60 * 60,
     });
 };

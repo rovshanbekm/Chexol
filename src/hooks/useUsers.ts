@@ -28,9 +28,7 @@ export const usePostUsers = () => {
 
             if (errData?.message) {
                 toast.error(`${errData.message}`);
-            } else {
-                toast.error("Xatolik yuz berdi");
-            }
+            } 
         },
     });
 };
@@ -51,7 +49,7 @@ export const useGetUsersProfile = () => {
                 return []
             }
         },
-        staleTime: 1000 * 60 * 60,
+        staleTime: 1000 * 60 * 10,
     });
 };
 

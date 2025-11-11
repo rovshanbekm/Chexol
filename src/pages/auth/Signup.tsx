@@ -77,7 +77,7 @@ export const Signup = () => {
                 navigate("/");
             },
             onError: () => {
-                toast.error("Ro'yxatdan o'tishda xatolik yuz berdi");
+                toast.error("Bunaqa user allaqachon bor");
             },
         });
     };

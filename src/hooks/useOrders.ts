@@ -19,7 +19,7 @@ export const usePostOrders = () => {
         },
 
         onSuccess: (result) => {
-            qc.invalidateQueries({ queryKey: ['orders', 'buskets'] });
+            qc.invalidateQueries({ queryKey: ['orders', 'buskets', 'cashback'] });
             toast.success(result.data?.data);
         },
 

@@ -78,9 +78,11 @@ export const CheckoutPage = () => {
         createOrders(payload, {
             onSuccess: () => {
                 localStorage.removeItem("checkout_form")
-                setTimeout(() => {
+                if (payload.payment_type === "card") {
                     navigate("/payment")
-                }, 50)
+                } else {
+                    navigate("/order")
+                }
             },
         })
     }

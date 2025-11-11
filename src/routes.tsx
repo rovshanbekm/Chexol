@@ -1,5 +1,5 @@
 import { lazy, Suspense, type JSX } from "react";
-import { createBrowserRouter } from "react-router-dom"
+import { createBrowserRouter, Navigate } from "react-router-dom"
 import { AuthLayout, UserLayout } from "./layouts";
 
 
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/verify',
-                element:withSuspense(<VerifyPage />)
+                element: withSuspense(<VerifyPage />)
             }
         ]
     },
@@ -83,6 +83,10 @@ const router = createBrowserRouter([
     {
         path: "/products/:id",
         element: withSuspense(<CartDetailPage />),
+    },
+    {
+        path: '*',
+        element: <Navigate to="/" replace />,
     },
 ])
 
