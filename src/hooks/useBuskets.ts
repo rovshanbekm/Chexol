@@ -24,7 +24,6 @@ export const useGetBuskets = () => {
                 return []
             }
         },
-        staleTime: 1000 * 60 * 60,
     });
 };
 

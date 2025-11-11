@@ -19,7 +19,7 @@ export const usePostOrders = () => {
         },
 
         onSuccess: (result) => {
-            qc.invalidateQueries({ queryKey: ['orders'] });
+            qc.invalidateQueries({ queryKey: ['orders', 'buskets'] });
             toast.success(result.data?.data);
         },
 
@@ -38,7 +38,7 @@ export const usePostOrders = () => {
 
 export const useGetOrders = () => {
     return useQuery({
-        queryKey: ["orders"],
+        queryKey: ["orders", "buskets"],
         queryFn: async () => {
             try {
                 const res = await request.get(
@@ -48,7 +48,6 @@ export const useGetOrders = () => {
 
             } catch (error) {
                 console.log(error);
-                // toast.error("Yangi xabar qidirishda xatolik");
                 return []
             }
         },

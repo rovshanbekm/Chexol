@@ -13,7 +13,6 @@ type FormValues = {
     address?: string;
     payment_type?: string;
     items?: [{ product: string, quantity: number }];
-    paymentType?: string
 };
 
 export const CheckoutPage = () => {
@@ -24,10 +23,10 @@ export const CheckoutPage = () => {
     const [valueinput, setValueinput] = useState("")
 
     const { register, handleSubmit, reset, watch, setValue } = useForm<FormValues>({
-        defaultValues: { full_name: "", phone: "", address: "", paymentType: "" },
+        defaultValues: { full_name: "", phone: "", address: "", payment_type: "" },
     })
 
-    const paymentType = watch("paymentType")
+    const payment_type = watch("payment_type")
 
     useEffect(() => {
         const savedData = localStorage.getItem("checkout_form");
@@ -79,7 +78,9 @@ export const CheckoutPage = () => {
         createOrders(payload, {
             onSuccess: () => {
                 localStorage.removeItem("checkout_form")
-                navigate("/order")
+                setTimeout(() => {
+                    navigate("/payment")
+                }, 50)
             },
         })
     }
@@ -224,7 +225,7 @@ export const CheckoutPage = () => {
                     <label
                         key={type}
                         htmlFor={type}
-                        className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${paymentType === type
+                        className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${payment_type === type
                             ? "border-mainColor/50 bg-imgBgColor"
                             : "border-borderColor"
                             }`}
@@ -233,7 +234,7 @@ export const CheckoutPage = () => {
                             id={type}
                             type="radio"
                             value={type}
-                            {...register("paymentType")}
+                            {...register("payment_type")}
                             className="w-[18px] h-[18px] accent-mainColor"
                         />
                         <span className="text-sm text-secondColor">
