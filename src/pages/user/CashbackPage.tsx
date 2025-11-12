@@ -1,16 +1,27 @@
 import { ArrowLeft } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { useGetCashbacks } from "../../hooks"
 import { Button } from "../../components/ui/button"
+import { toast } from "react-toastify"
 
 export const CashbackPage = () => {
     const navigate = useNavigate()
     const { data: cashbacks } = useGetCashbacks()
+    const referralLink = "https://t.me/aksessuar_chexol_bot?start=6410330076";
 
-    const getTotalAmount = (list?: { amount: number }[]) => {
-        if (!list || list.length === 0) return 0;
-        return list.reduce((sum, item) => sum + (item?.amount || 0), 0);
+    const handleCopy = async () => {
+        try {
+            await navigator.clipboard.writeText(referralLink);
+            toast.success("Referal link nusxalandi");
+        } catch (err) {
+            console.error(err);
+        }
     };
+
+    // const getTotalAmount = (list?: { amount: number }[]) => {
+    //     if (!list || list.length === 0) return 0;
+    //     return list.reduce((sum, item) => sum + (item?.amount || 0), 0);
+    // };
 
     return (
         <>
@@ -28,18 +39,18 @@ export const CashbackPage = () => {
                 <div className="flex items-center gap-[11px] pt-5">
                     <div className="bg-white p-2.5 rounded-2xl w-full flex items-center flex-col justify-center gap-[5px]">
                         <h4 className="text-xs text-personalColor">Shaxsiy</h4>
-                        <h3 className="font-semibold text-[16px] text-personalColor"> {getTotalAmount(cashbacks?.my_cashbacks).toLocaleString("uz-UZ")} so’m</h3>
+                        <h3 className="font-semibold text-[16px] text-personalColor"> {Number(cashbacks?.my_cashback_total).toLocaleString("uz-UZ")} so’m</h3>
                     </div>
                     <div className="bg-white p-2.5 rounded-2xl w-full flex items-center flex-col justify-center gap-[5px]">
                         <h4 className="text-xs text-personalColor">Do’stim orqali</h4>
-                        <h3 className="font-semibold text-[16px] text-personalColor">{getTotalAmount(cashbacks?.referral_cashbacks).toLocaleString("uz-UZ")} so’m</h3>
+                        <h3 className="font-semibold text-[16px] text-personalColor">{Number(cashbacks?.referral_cashback_total).toLocaleString("uz-UZ")} so’m</h3>
                     </div>
                 </div>
             </div>
             <div className="flex flex-col gap-[5px] pt-7.5">
                 <h3 className="font-semibold text-xl text-secondColor">Keshbekni oshiring</h3>
                 <p className="text-base text-placeholderColor">Do‘stlaringizni taklif qiling va xaridlar orqali qo‘shimcha keshbek oling</p>
-                <Button className="font-semibold text-base w-[218px] mt-[15px]"><Link to={"https://t.me/aksessuar_chexol_bot?start=6410330076"}>Referal linkni ulashish</Link></Button>
+                <Button onClick={handleCopy} className="font-semibold text-base w-[218px] mt-[15px]">Referal linkni ulashish</Button>
             </div>
         </>
     )

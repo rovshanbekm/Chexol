@@ -19,18 +19,43 @@ export const ProfilePage = () => {
   const { data: userProfile } = useGetUsersProfile();
   const { mutate: editProfile, isPending } = useEditProfile();
 
-  const { register, reset, handleSubmit } = useForm({
+  const { register, reset, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       full_name: "",
       phone: "",
     },
   });
 
+  const valueinput = watch("phone", "");
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let input = e.target.value.replace(/\D/g, "");
+
+    if (!input.startsWith("998") && input.length > 0) {
+      input = "998" + input;
+    }
+
+    if (input.length > 12) input = input.slice(0, 12);
+
+    let formatted = "";
+    if (input.length > 0) formatted = "+" + input.substring(0, 3);
+    if (input.length > 3) formatted += " (" + input.substring(3, 5);
+    if (input.length >= 5) formatted += ")";
+    if (input.length > 5) formatted += " " + input.substring(5, 8);
+    if (input.length > 8) formatted += " " + input.substring(8, 10);
+    if (input.length > 10) formatted += " " + input.substring(10, 12);
+
+    setValue("phone", formatted.trim());
+  };
+
   useEffect(() => {
     if (userProfile) {
+      const formatted = userProfile.phone.replace(
+        /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
+        "+$1 ($2) $3 $4 $5"
+      );
       reset({
         full_name: userProfile.full_name,
-        phone: userProfile.phone,
+        phone: formatted,
       });
     }
   }, [userProfile, reset]);
@@ -39,10 +64,13 @@ export const ProfilePage = () => {
     setEditing(true);
   };
 
-  const onSubmit = (values:any) => {
+  const onSubmit = (values: any) => {
+    const cleanedPhone = "+" + values.phone.replace(/\D/g, "");
+    console.log(cleanedPhone);
+    
     if (!userProfile?.id) return;
     editProfile(
-      { id: userProfile.id, ...values },
+      { id: userProfile.id,  ...values, phone: cleanedPhone },
       {
         onSuccess: () => {
           setEditing(false);
@@ -50,6 +78,7 @@ export const ProfilePage = () => {
       }
     );
   };
+
   return (
     <div className="h-full flex flex-col pb-20">
       {!editing && (
@@ -130,7 +159,7 @@ export const ProfilePage = () => {
             </div>
             <div className="flex flex-col gap-[5px]">
               <p className="text-base leading-5 text-secondColor">Telefon raqam</p>
-              <Input {...register("phone")} placeholder="Telefon raqam" className="h-12 rounded-[12px]" />
+              <Input {...register("phone")} value={valueinput} onChange={handlePhoneChange} placeholder="Telefon raqam" className="h-12 rounded-[12px]" />
             </div>
           </div>
           <Button disabled={isPending} type="submit" className="mt-auto rounded-[20px] w-full"> {isPending ? "Saqlanmoqda..." : "Saqlash"}</Button>

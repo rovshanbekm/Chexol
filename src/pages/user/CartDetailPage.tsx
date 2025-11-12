@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Minus, Plus } from "lucide-react";
+import { ArrowLeft, Minus, Plus } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { useForm } from "react-hook-form";
 import { useGetProductsById, usePostCart } from "../../hooks";
@@ -114,6 +114,7 @@ export const CartDetailPage = () => {
                             );
                         })}
                     </div>
+                    <button type="button" onClick={() => navigate("/")} className="bg-white absolute top-2 left-2 rounded-[10px] p-1 cursor-pointer"><ArrowLeft /></button>
                 </div>
 
                 <div className="flex gap-2 pt-2.5">
