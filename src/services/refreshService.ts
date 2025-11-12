@@ -4,7 +4,7 @@ import { LOGIN, REFRESH_USER } from "../constants";
 import { getTelegramUserDataID } from "../services/get_init_data_user_id";
 
 export const refreshTokens = async () => {
-    const { access_token, refresh_token, user_id } = getTokens();
+    const { access_token, refresh_token, user_id, chat_id } = getTokens();
 
     if (!refresh_token) {
         throw new Error("No refresh token available");
@@ -13,7 +13,7 @@ export const refreshTokens = async () => {
     try {
         const response = await axios.post(
             REFRESH_USER,
-            { refresh: refresh_token },
+            { refresh_token },
             {
                 headers: {
                     "Content-Type": "application/json",
@@ -37,12 +37,12 @@ export const refreshTokens = async () => {
             );
 
             const { access_token: newAccess2, refresh_token: newRefresh2 } = loginResponse.data;
-            setTokens({ access_token: newAccess2, refresh_token: newRefresh2, user_id });
+            setTokens({ access_token: newAccess2, refresh_token: newRefresh2, user_id: String(user_id), chat_id: String(chat_id) });
             return newAccess2;
         }
 
         if (user_id !== null) {
-            setTokens({ access_token: newAccess, refresh_token: newRefresh, user_id });
+            setTokens({ access_token: newAccess, refresh_token: newRefresh, user_id: String(user_id), chat_id: String(chat_id) });
         } else {
             throw new Error("user_id is null");
         }

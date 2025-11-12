@@ -95,7 +95,7 @@ export const CartDetailPage = () => {
                         src={mainImage}
                         alt=""
                     />
-                    <div className="h-[102px] absolute top-10.5 right-2.5 w-9 rounded-[30px] bg-white flex flex-col items-center justify-center gap-3 p-2 shadow-md">
+                    <div className="h-max absolute top-1/2 -translate-y-1/2 right-2.5 rounded-[30px] bg-white flex flex-col items-center justify-center gap-1.5 p-2.5">
                         {productsById?.colors?.map((item: any) => {
                             const isActive = selectedColor === item.color;
                             return (
@@ -106,14 +106,11 @@ export const CartDetailPage = () => {
                                     className="relative w-4 h-4 rounded-full transition-all duration-200"
                                     style={{
                                         backgroundColor: item.hex_code || "#999",
-                                        boxShadow: isActive
-                                            ? `0 0 0 2px ${item.hex_code === "#FFFFFF" ? "#ccc" : item.hex_code}, 0 0 0 5px #fff`
-                                            : "none",
-                                        border: !isActive
-                                            ? `2px solid ${item.hex_code === "#FFFFFF" ? "#ccc" : item.hex_code}`
-                                            : "none",
+
                                     }}
-                                />
+                                >
+                                    {isActive && <div className="absolute border-white border-2 size-3 top-1/2 left-1/2 -translate-1/2 rounded-full"></div>}
+                                </button>
                             );
                         })}
                     </div>

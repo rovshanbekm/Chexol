@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import request from "../services";
 import { toast } from "react-toastify";
 import { DOMAIN, USERS } from "../constants";
+import { getTelegramUserDataID } from "../services/get_init_data_user_id";
+import { setTokens } from "../utils/token";
 
 export const usePostUsers = () => {
     const qc = useQueryClient();
@@ -28,7 +30,7 @@ export const usePostUsers = () => {
 
             if (errData?.message) {
                 toast.error(`${errData.message}`);
-            } 
+            }
         },
     });
 };
@@ -72,7 +74,7 @@ export const useEditProfile = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: { id: string; [key: string]: any }) => {
+        mutationFn: async (data: { id: string;[key: string]: any }) => {
             if (!data.id) throw new Error("Foydalanuvchi ID topilmadi");
 
             const res = await request.patch(`${DOMAIN}${USERS}${data.id}/`, data);
@@ -89,5 +91,39 @@ export const useEditProfile = () => {
                 toast.error("An unknown error occurred");
             }
         }
+    });
+};
+
+
+
+export const useGetUserByChat = () => {
+    return useQuery({
+        queryKey: ["users"],
+        queryFn: async () => {
+            try {
+                const chat_id = getTelegramUserDataID();
+                if (!chat_id) throw new Error("chat_id topilmadi");
+
+                const res = await request.get(`${DOMAIN}${USERS}user_by_chat/${chat_id}/`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                const data = res.data;
+
+                if (data.access_token && data.refresh_token) {
+                    setTokens({
+                        access_token: data.access_token,
+                        refresh_token: data.refresh_token,
+                    });
+                }
+
+                return data ?? {};
+            } catch (error) {
+                // toast.error("Foydalanuvchini olishda xatolik yuz berdi");
+                return {};
+            }
+        },
     });
 };
