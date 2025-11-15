@@ -144,6 +144,5 @@ export const useGetUsersReferall = () => {
                 return []
             }
         },
-        staleTime: 1000 * 60 * 10,
     });
 };
