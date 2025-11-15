@@ -62,6 +62,8 @@ export const CartDetailPage = () => {
                 if (!auth) {
                     toast.error("Iltimos, avval tizimga kiring!");
                     navigate("/profile")
+                } else {
+                    toast.error("Avval rang tanlang")
                 }
             }
         });
