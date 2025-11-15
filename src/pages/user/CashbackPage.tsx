@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import { useGetCashbacks } from "../../hooks"
+import { useGetCashbacks, useGetUsersProfile } from "../../hooks"
 import { Button } from "../../components/ui/button"
 import { toast } from "react-toastify"
 import { ReferalTable } from "../../components/table"
@@ -8,7 +8,8 @@ import { ReferalTable } from "../../components/table"
 export const CashbackPage = () => {
     const navigate = useNavigate()
     const { data: cashbacks } = useGetCashbacks()
-    const referralLink = "https://t.me/aksessuar_chexol_bot?start=6410330076";
+    const {data: userData} = useGetUsersProfile()
+    const referralLink = `https://t.me/aksessuar_chexol_bot?start=${userData?.chat_id}`;
 
     const handleCopy = async () => {
         try {
