@@ -20,7 +20,7 @@ export const ReferalTable = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {referrals.length === 0 ? (
+                        {referrals?.length === 0 ? (
                             <TableRow>
                                 <TableCell className='text-center text-placeholderColor'>
                                     Siz hali hech kimni taklif qilmagansiz
