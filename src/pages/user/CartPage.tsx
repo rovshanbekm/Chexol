@@ -116,7 +116,7 @@ export const CartPage = () => {
       </div>
 
       {buskets?.length > 0 && (
-        <div className="px-[22px] py-2.5 border rounded-t-[20px] bottom-0 left-0 w-full bg-white fixed z-40">
+        <div className="px-[22px] py-2.5 border rounded-t-[20px] bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] sm:max-w-[425px] bg-white fixed z-40">
           <div className="flex items-center justify-between w-full">
             <h3 className="font-semibold text-[18px]">Jami:</h3>
             <p className="font-semibold text-[18px]"> {total?.toLocaleString("uz-UZ")} so‘m</p>
@@ -128,7 +128,7 @@ export const CartPage = () => {
       )}
 
       {buskets?.length === 0 && (
-        <div className="flex items-center justify-between px-[22px] py-2.5 border rounded-t-[20px] left-0 bottom-0 bg-white w-full fixed z-40 ">
+        <div className="flex items-center justify-between px-[22px] py-2.5 border rounded-t-[20px] left-1/2 -translate-x-1/2 max-w-[390px] sm:max-w-[425px] bottom-0 bg-white w-full fixed z-40 ">
           {footerData.map(({ name, path, icon: Icon }, index) => {
             const isActive = pathname === path;
             return (

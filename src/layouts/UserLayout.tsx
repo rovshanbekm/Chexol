@@ -8,8 +8,8 @@ export const UserLayout = () => {
             <div className="max-w-[390px] mx-auto px-4 pt-4 h-dvh">
                 <Header />
                 <Outlet />
+                <Footer />
             </div>
-            <Footer />
         </>
     )
 }

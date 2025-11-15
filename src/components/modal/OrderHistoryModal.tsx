@@ -36,7 +36,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                             <AlertDialogDescription key={item.id} className="flex items-start! flex-col gap-3 pt-3">
                                 <div className="flex gap-10">
                                     <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Buyurtma:</h4>
-                                    <p className="font-medium text-sm leading-6 text-secondColor">1002</p>
+                                    <p className="font-medium text-sm leading-6 text-secondColor">{orders?.order_number}</p>
                                 </div>
                                 <div className="flex gap-10">
                                     <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Sana:</h4>

@@ -28,7 +28,7 @@ export const ProfilePage = () => {
 
   const valueinput = watch("phone", "");
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let input = e.target.value.replace(/\D/g, "");
+    let input = e.target?.value?.replace(/\D/g, "");
 
     if (!input.startsWith("998") && input.length > 0) {
       input = "998" + input;
@@ -49,7 +49,7 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     if (userProfile) {
-      const formatted = userProfile.phone.replace(
+      const formatted = userProfile?.phone?.replace(
         /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
         "+$1 ($2) $3 $4 $5"
       );
@@ -65,7 +65,7 @@ export const ProfilePage = () => {
   };
 
   const onSubmit = (values: any) => {
-    const cleanedPhone = "+" + values.phone.replace(/\D/g, "");
+    const cleanedPhone = "+" + values?.phone?.replace(/\D/g, "");
     console.log(cleanedPhone);
     
     if (!userProfile?.id) return;

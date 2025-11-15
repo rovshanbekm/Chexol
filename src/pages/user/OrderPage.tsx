@@ -45,7 +45,7 @@ export const OrderPage = () => {
                     src={item.image}
                     alt={item.title}
                   />
-                  <div className="p-2.5 flex flex-col flex-1">
+                  <div className="p-4 flex flex-col flex-1 justify-between">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium text-sm text-secondColor">
                         {item.title}
@@ -64,7 +64,7 @@ export const OrderPage = () => {
                         </p>
                       )}
                     </div>
-                    <div className="flex items-center justify-between pt-5">
+                    <div className="flex items-center justify-between">
                       <p className="font-semibold text-base text-mainColor">
                         {Number(item.price * item.quantity).toLocaleString("uz-UZ")} so’m
                       </p>

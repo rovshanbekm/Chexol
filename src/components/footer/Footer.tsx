@@ -9,7 +9,7 @@ export const Footer = () => {
 
     return (
         <>
-            <div className={`flex items-center justify-between px-[22px] py-2.5 border rounded-t-[20px] bottom-0 bg-white w-full fixed z-40 ${(hideNavbar || detailFooter) && "hidden"}`}>
+            <div className={`flex items-center justify-between px-[22px] py-2.5 border rounded-t-[20px] bg-white fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] sm:max-w-[425px] z-40 ${(hideNavbar || detailFooter) && "hidden"}`}>
                 {footerData.map(({ name, path, icon: Icon }, index) => {
                     const isActive = pathname === path
                     const homeActive = path === "/" && pathname === "/filter"

@@ -89,15 +89,15 @@ export const HomeCard = () => {
                   {item?.description}
                 </p>
                 <div className="flex items-center justify-between">
-                  <h4 className="font-semibold text-[15px] text-mainColor">
+                  <h4 className="font-semibold text-[12px] 2xs:text-sm sm:text-[15px] text-mainColor">
                     {Number(item?.price).toLocaleString("uz-UZ")} so‘m
                   </h4>
                   <Button
                     type="button"
                     onClick={() => navigate(`${`/products/${item.id}`}`)}
-                    className="w-[42px]! h-[42px]! rounded-[12px]!"
+                    className="w-8! h-[33px]! 2xs:w-[42px]! 2xs:h-[42px]! rounded-[10px]! 2xs:rounded-[12px]!"
                   >
-                    <ShoppingCart />
+                    <ShoppingCart className="size-4.5! 2xs:size-6!" />
                   </Button>
                 </div>
               </div>

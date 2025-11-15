@@ -87,11 +87,11 @@ export const CartDetailPage = () => {
     const handlePlus = () => setCount(count + 1);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="w-full px-4 pt-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-[390px] mx-auto px-4">
+            <div className="w-full pt-4">
                 <div className="h-[198px] bg-imgBgColor w-full relative">
                     <img
-                        className="h-full w-full object-cover rounded-[12px]"
+                        className="h-full w-full object-contain rounded-[12px]"
                         src={mainImage}
                         alt=""
                     />
@@ -141,7 +141,7 @@ export const CartDetailPage = () => {
                 </div>
             </div>
 
-            <div className="flex items-center px-4 py-2.5 border rounded-t-[20px] bottom-0 bg-white w-full justify-between gap-2.5 fixed z-40">
+            <div className="flex items-center px-4 py-2.5 border rounded-t-[20px] bottom-0 bg-white left-1/2 -translate-x-1/2 w-full max-w-[390px] sm:max-w-[425px] justify-between gap-2.5 fixed z-40">
                 <div className="flex items-center gap-[3px]">
                     <button
                         type="button"
@@ -161,7 +161,7 @@ export const CartDetailPage = () => {
                         <Plus className="text-mainColor" />
                     </button>
                 </div>
-                <Button type="submit" className="2xs:!w-[190px] sm:!w-[214px] font-semibold text-base">
+                <Button type="submit" className="!w-[150px] 2xs:!w-[190px] sm:!w-[214px] font-semibold text-sm 2xs:text-base">
                     Savatga qo’shish
                 </Button>
             </div>
