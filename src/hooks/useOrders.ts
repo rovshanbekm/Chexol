@@ -26,10 +26,8 @@ export const usePostOrders = () => {
         onError: (error: any) => {
             const errData = error?.response?.data;
 
-            if (errData?.error_message) {
-                toast.error(`${errData.error_field}: ${errData.error_message}`);
-            } else {
-                toast.error("Xatolik yuz berdi");
+            if (errData?.message) {
+                toast.error(`${errData.message}`);
             }
         },
     });

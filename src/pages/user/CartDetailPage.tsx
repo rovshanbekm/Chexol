@@ -43,18 +43,6 @@ export const CartDetailPage = () => {
     }, [selectedColor, productsById]);
 
     const onSubmit = () => {
-        // let productIdToSend = productsById?.id;
-
-        // const foundImage = productsById?.images?.find((img: any) => img.image === mainImage);
-        // if (foundImage) {
-        //     productIdToSend = foundImage.id;
-        // }
-
-        // const payload = {
-        //     product_id: productIdToSend,
-        //     quantity: count,
-        // };
-
         const payload = {
             product_id: productsById?.id,
             quantity: count,
@@ -74,8 +62,6 @@ export const CartDetailPage = () => {
                 if (!auth) {
                     toast.error("Iltimos, avval tizimga kiring!");
                     navigate("/profile")
-                } else {
-                    toast.error("Rang tanlash majburiy")
                 }
             }
         });

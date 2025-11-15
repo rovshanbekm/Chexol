@@ -1,10 +1,11 @@
 import { ArrowLeft, Dot, PencilLine, Plus } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { Input } from "../../components/ui/input"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { Button } from "../../components/ui/button"
-import { useGetAddress, useGetBuskets, usePostOrders } from "../../hooks"
+import { useGetAddress, useGetBuskets, useGetUsersProfile, usePostOrders } from "../../hooks"
 import { useEffect, useState } from "react"
+import { Checkbox } from "../../components/ui/checkbox"
 
 
 type FormValues = {
@@ -13,6 +14,7 @@ type FormValues = {
     address?: string;
     payment_type?: string;
     items?: [{ product: string, quantity: number }];
+    cashback?: string
 };
 
 export const CheckoutPage = () => {
@@ -20,13 +22,21 @@ export const CheckoutPage = () => {
     const { data: cards } = useGetBuskets()
     const { data: addresses } = useGetAddress()
     const { mutate: createOrders } = usePostOrders()
+    const { data: userBalance } = useGetUsersProfile()
     const [valueinput, setValueinput] = useState("")
 
-    const { register, handleSubmit, reset, watch, setValue } = useForm<FormValues>({
-        defaultValues: { full_name: "", phone: "", address: "", payment_type: "" },
+    const { register, handleSubmit, reset, watch, setValue, control } = useForm<FormValues>({
+        defaultValues: { full_name: "", phone: "", address: "", payment_type: "", cashback: "0", },
     })
 
     const payment_type = watch("payment_type")
+    const cashback = watch("cashback")
+
+    useEffect(() => {
+        if (cashback) {
+            setValue("payment_type", "");
+        }
+    }, [cashback, setValue]);
 
     useEffect(() => {
         const savedData = localStorage.getItem("checkout_form");
@@ -66,30 +76,49 @@ export const CheckoutPage = () => {
 
 
     const onSubmit = (data: FormValues) => {
-        const payload = {
-            ...data,
+        const payload: any = {
+            full_name: data.full_name,
             phone: valueinput,
+            address: addresses?.[0]?.id,
             items: cards.map((item: any) => ({
                 product: item.id,
                 quantity: item.quantity,
+                color: item.color,
             })),
+        };
+
+        if (data.payment_type) {
+            payload.payment_type = data.payment_type;
+        }
+
+        if (data.cashback && Number(data.cashback) > 0) {
+            payload.cashback = data.cashback
         }
 
         createOrders(payload, {
             onSuccess: () => {
-                localStorage.removeItem("checkout_form")
+                localStorage.removeItem("checkout_form");
                 if (payload.payment_type === "card") {
-                    navigate("/payment")
+                    navigate("/payment");
                 } else {
-                    navigate("/order")
+                    navigate("/order");
                 }
             },
-        })
-    }
+        });
+    };
+
     const total = cards?.reduce(
         (sum: number, item: any) => sum + item.price * item.quantity,
         0
     );
+    // console.log(cards);
+    console.log(userBalance);
+
+
+    const finalTotal = cashback && Number(cashback) > 1000000
+        ? (total - Number(cashback))
+        : total;
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -219,7 +248,7 @@ export const CheckoutPage = () => {
                 </label>
             </div> */}
 
-            <div className="pb-40">
+            <div className={`${userBalance && userBalance >= 1000000 ? "pt-7.5" : " pb-40"}`}>
                 <h3 className="font-semibold text-base text-secondColor pt-7.5 pb-2.5">
                     To’lov turi
                 </h3>
@@ -237,8 +266,13 @@ export const CheckoutPage = () => {
                             type="radio"
                             value={type}
                             {...register("payment_type")}
+                            onChange={(e) => {
+                                setValue("payment_type", e.target.value);
+                                setValue("cashback", "0");
+                            }}
                             className="w-[18px] h-[18px] accent-mainColor"
                         />
+
                         <span className="text-sm text-secondColor">
                             {type === "card"
                                 ? "Kartaga pul o’tkazish"
@@ -250,10 +284,40 @@ export const CheckoutPage = () => {
                 ))}
             </div>
 
+            {userBalance && userBalance >= 1000000 && (
+                <div className="pb-40">
+                    <div className="w-full border rounded-[12px] p-4">
+                        <div className="flex items-center gap-2.5">
+                            <Controller
+                                control={control}
+                                name="cashback"
+                                render={({ field }) => (
+                                    <div className="w-full flex items-center gap-2.5">
+                                        <Checkbox
+                                            className='focus-visible:ring-sky-600/20 size-6 data-[state=checked]:border-sky-600 data-[state=checked]:bg-sky-600 dark:text-white dark:focus-visible:ring-sky-400/40 dark:data-[state=checked]:border-sky-400 dark:data-[state=checked]:bg-sky-400'
+                                            checked={Number(field.value) > 0}
+                                            onCheckedChange={(val) => {
+                                                if (val) {
+                                                    field.onChange(userBalance?.balance || 0);
+                                                    setValue("payment_type", "");
+                                                } else {
+                                                    field.onChange("0");
+                                                }
+                                            }}
+                                        />
+                                        Keshbekdan foydalanish
+                                    </div>
+                                )}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className={` px-[22px] py-2.5 border rounded-t-[20px] bottom-0 left-0 w-full bg-white fixed z-40`}>
                 <div className="flex items-center justify-between w-full">
                     <h3 className="font-semibold text-[18px]">Jami:</h3>
-                    <p className="font-semibold text-[18px]">{total?.toLocaleString("uz-UZ")} so‘m</p>
+                    <p className="font-semibold text-[18px]">{finalTotal?.toLocaleString("uz-UZ")} so‘m</p>
                 </div>
                 <Button type="submit" className="w-full mt-2.5">Buyurtmani tasdiqlash va to’lash</Button>
             </div>

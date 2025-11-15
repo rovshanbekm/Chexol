@@ -127,6 +127,7 @@ export const ProfilePage = () => {
                   <h4 className="text-lg text-logoutColor">Hisobdan chiqish</h4>
                 </button> */}
               </div>
+              
             </>
           ) : (
             <div className="flex flex-col gap-[5px] py-4 pl-4 pr-1">
@@ -165,6 +166,7 @@ export const ProfilePage = () => {
           <Button disabled={isPending} type="submit" className="mt-auto rounded-[20px] w-full"> {isPending ? "Saqlanmoqda..." : "Saqlash"}</Button>
         </form>
       )}
+
     </div>
   )
 }

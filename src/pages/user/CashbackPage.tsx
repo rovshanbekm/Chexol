@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useGetCashbacks } from "../../hooks"
 import { Button } from "../../components/ui/button"
 import { toast } from "react-toastify"
+import { ReferalTable } from "../../components/table"
 
 export const CashbackPage = () => {
     const navigate = useNavigate()
@@ -52,6 +53,7 @@ export const CashbackPage = () => {
                 <p className="text-base text-placeholderColor">Do‘stlaringizni taklif qiling va xaridlar orqali qo‘shimcha keshbek oling</p>
                 <Button onClick={handleCopy} className="font-semibold text-base w-[218px] mt-[15px]">Referal linkni ulashish</Button>
             </div>
+            <ReferalTable />
         </>
     )
 }

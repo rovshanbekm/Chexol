@@ -127,3 +127,24 @@ export const useGetUserByChat = () => {
         },
     });
 };
+
+
+
+export const useGetUsersReferall = () => {
+    return useQuery({
+        queryKey: ["users"],
+        queryFn: async () => {
+            try {
+                const res = await request.get(
+                    `${USERS}my-referrals/`
+                );
+                return res?.data ?? [];
+
+            } catch (error) {
+                console.log(error);
+                return []
+            }
+        },
+        staleTime: 1000 * 60 * 10,
+    });
+};
