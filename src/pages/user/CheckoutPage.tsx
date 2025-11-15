@@ -115,7 +115,7 @@ export const CheckoutPage = () => {
     console.log(userBalance);
 
 
-    const finalTotal = cashback && Number(cashback) > 1000000
+    const finalTotal = cashback && Number(cashback) >= 1000000
         ? (total - Number(cashback))
         : total;
 

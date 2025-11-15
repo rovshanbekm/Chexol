@@ -7,7 +7,7 @@ import { Separator } from "@radix-ui/react-select"
 import { useEffect, useState } from "react"
 import { DeleteModal } from "../../components/modal"
 import { Input } from "../../components/ui/input"
-import { useEditProfile, useGetUsersProfile } from "../../hooks"
+import { useEditProfile, useGetCashbacks, useGetUsersProfile } from "../../hooks"
 import { useForm } from "react-hook-form"
 
 export const ProfilePage = () => {
@@ -18,6 +18,7 @@ export const ProfilePage = () => {
 
   const { data: userProfile } = useGetUsersProfile();
   const { mutate: editProfile, isPending } = useEditProfile();
+  const { data: cashbacks } = useGetCashbacks()
 
   const { register, reset, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -67,10 +68,10 @@ export const ProfilePage = () => {
   const onSubmit = (values: any) => {
     const cleanedPhone = "+" + values?.phone?.replace(/\D/g, "");
     console.log(cleanedPhone);
-    
+
     if (!userProfile?.id) return;
     editProfile(
-      { id: userProfile.id,  ...values, phone: cleanedPhone },
+      { id: userProfile.id, ...values, phone: cleanedPhone },
       {
         onSuccess: () => {
           setEditing(false);
@@ -117,7 +118,12 @@ export const ProfilePage = () => {
                     <h3 className="text-lg text-secondColor">Keshbek</h3>
                   </div>
                   <div className="flex items-center gap-[18px]">
-                    {/* <h4 className="text-mainColor font-medium text-sm">+1 345 so’m</h4> */}
+                    {cashbacks?.my_cashbacks?.[0] && (
+                      <h4 className="text-mainColor font-medium text-sm">
+                        +{Number(cashbacks.my_cashbacks[0].amount).toLocaleString("uz-UZ")} so’m
+                      </h4>
+                    )}
+
                     <ChevronRight className="text-placeholderColor" />
                   </div>
                 </button>
@@ -127,7 +133,7 @@ export const ProfilePage = () => {
                   <h4 className="text-lg text-logoutColor">Hisobdan chiqish</h4>
                 </button> */}
               </div>
-              
+
             </>
           ) : (
             <div className="flex flex-col gap-[5px] py-4 pl-4 pr-1">

@@ -26,7 +26,7 @@ export const ReferalTable = () => {
                                     Siz hali hech kimni taklif qilmagansiz
                                 </TableCell>
                             </TableRow>
-                        ) : referrals.map((referall:any) => (
+                        ) : referrals?.map((referall:any) => (
                             <TableRow key={referall.id}>
                                 <TableCell>{referall.paymentMethod}</TableCell>
                             </TableRow>
