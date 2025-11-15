@@ -9,7 +9,7 @@ import {
 import { useGetUsersReferall } from '../../hooks'
 
 export const ReferalTable = () => {
-    const { data: referrals } = useGetUsersReferall()
+    const { data: referrals, isLoading } = useGetUsersReferall()
     return (
         <div className='w-full pt-4'>
             <div className='grid [&>div]:max-h-70 [&>div]:rounded-sm [&>div]:border'>
@@ -20,7 +20,7 @@ export const ReferalTable = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {referrals?.length === 0 ? (
+                        {isLoading ? <div>Loading...</div> : referrals?.length === 0 ? (
                             <TableRow>
                                 <TableCell className='text-center text-placeholderColor'>
                                     Siz hali hech kimni taklif qilmagansiz

@@ -8,7 +8,7 @@ import { ReferalTable } from "../../components/table"
 export const CashbackPage = () => {
     const navigate = useNavigate()
     const { data: cashbacks } = useGetCashbacks()
-    const {data: userData} = useGetUsersProfile()
+    const { data: userData } = useGetUsersProfile()
     const referralLink = `https://t.me/aksessuar_chexol_bot?start=${userData?.chat_id}`;
 
     const handleCopy = async () => {
