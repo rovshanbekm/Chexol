@@ -30,7 +30,7 @@ export const ReferalTable = () => {
                         ) : (
                             referralsArray.map((referall: any) => (
                                 <TableRow key={referall.id}>
-                                    <TableCell>{referall.paymentMethod}</TableCell>
+                                    <TableCell>{referall.full_name}</TableCell>
                                 </TableRow>
                             ))
                         )}
