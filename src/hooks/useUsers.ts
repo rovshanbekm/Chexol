@@ -51,7 +51,6 @@ export const useGetUsersProfile = () => {
                 return []
             }
         },
-        staleTime: 1000 * 60 * 10,
     });
 };
 
