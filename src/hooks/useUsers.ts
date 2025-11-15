@@ -131,17 +131,36 @@ export const useGetUserByChat = () => {
 
 export const useGetUsersReferall = () => {
     return useQuery({
-        queryKey: ["users"],
+        queryKey: ["users-referrals"],
         queryFn: async () => {
             try {
-                const res = await request.get(
-                    `${USERS}my-referrals/`
-                );
-                return res?.data ?? [];
+                const res = await request.get(`${USERS}my-referrals/`);
+                const data = res?.data;
 
+                // data -> {} yoki [] bo‘lishi mumkin
+                // Bizga array kerak, shuning uchun tekshiramiz:
+
+                if (Array.isArray(data)) {
+                    return data;  // agar backend to'g'ridan-to'g'ri massiv qaytarsa
+                }
+
+                // agar object qaytsa — ichidan array bo'lgan property izlaymiz
+                if (Array.isArray(data?.my_referrals)) {
+                    return data.my_referrals;
+                }
+
+                if (Array.isArray(data?.referrals)) {
+                    return data.referrals;
+                }
+
+                if (Array.isArray(data?.results)) {
+                    return data.results;
+                }
+
+                return []; // agar hech biri bo‘lmasa
             } catch (error) {
                 console.log(error);
-                return []
+                return [];
             }
         },
     });
