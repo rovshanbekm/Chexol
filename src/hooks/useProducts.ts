@@ -26,11 +26,9 @@ export const useGetProducts = () => {
 
             } catch (error) {
                 console.log(error);
-                toast.error("Yangi xabar qidirishda xatolik");
                 return []
             }
         },
-        staleTime: 1000 * 60 * 60,
     });
 };
 
@@ -51,7 +49,7 @@ export const useGetProductsById = (id: string | undefined, colorId?: string) => 
                 return null;
             }
         },
-        staleTime: 1000 * 60 * 5,
+        
     });
 };
 

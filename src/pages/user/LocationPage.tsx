@@ -118,7 +118,7 @@ export const LocationPage = () => {
                 </div>
 
                 <div className="flex flex-col gap-[5px]">
-                    <label className="text-base leading-5 text-secondColor">Ko’cha</label>
+                    <label className="text-base leading-5 text-secondColor">Tuman</label>
                     <Input
                         {...register("street", { required: true })}
                         className="rounded-[12px] py-3 px-4 h-12"
@@ -126,7 +126,7 @@ export const LocationPage = () => {
                     />
                 </div>
 
-                <div className="flex gap-2.5">
+                {/* <div className="flex gap-2.5">
                     <div className="flex flex-col gap-[5px]">
                         <label className="text-base leading-5 text-secondColor">Uy raqami</label>
                         <Input
@@ -162,7 +162,7 @@ export const LocationPage = () => {
                             placeholder="4-qavat"
                         />
                     </div>
-                </div>
+                </div> */}
             </div>
             <Button type="submit" className="mt-auto">
                 {addressData ? "Yangilash" : "Saqlash"}

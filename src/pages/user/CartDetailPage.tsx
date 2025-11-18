@@ -46,7 +46,7 @@ export const CartDetailPage = () => {
         const payload = {
             product_id: productsById?.id,
             quantity: count,
-            color: selectedColor,
+            color_id: selectedColor,
         };
 
         createBuskets(payload, {
@@ -91,7 +91,7 @@ export const CartDetailPage = () => {
                                     key={item.id}
                                     type="button"
                                     onClick={() => setSelectedColor(item.color)}
-                                    className="relative w-4 h-4 rounded-full transition-all duration-200"
+                                    className="relative w-4 h-4 rounded-full transition-all cursor-pointer duration-200"
                                     style={{
                                         backgroundColor: item.hex_code || "#999",
 

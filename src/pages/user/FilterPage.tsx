@@ -69,7 +69,7 @@ export const FilterPage = () => {
                             <button
                                 key={cat.id}
                                 onClick={() => setSettingsCategoryTab(cat.slug || cat.id)}
-                                className={`h-12 rounded-[20px] py-[13.5px] px-[15px] border font-medium text-sm cursor-pointer ${settingsCategoryTab === (cat.slug || cat.id)
+                                className={`h-12 rounded-[20px] px-[15px] border font-medium text-sm cursor-pointer ${settingsCategoryTab === (cat.slug || cat.id)
                                     ? "bg-mainColor text-white"
                                     : "bg-white text-secondColor"
                                     }`}

@@ -74,16 +74,32 @@ export const CheckoutPage = () => {
         setValue("phone", formattedValue);
     };
 
+    useEffect(() => {
+        if (userBalance) {
+            const formatted = userBalance?.phone?.replace(
+                /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
+                "+$1 ($2) $3 $4 $5"
+            );
+            reset({
+                full_name: userBalance.full_name,
+                phone: formatted ?? "",
+                address: "",
+                payment_type: "",
+                cashback: "0"
+            });
+        }
+    }, [userBalance, reset]);
+
 
     const onSubmit = (data: FormValues) => {
         const payload: any = {
-            full_name: data.full_name,
+            full_name: userBalance.full_name,
             phone: valueinput,
             address: addresses?.[0]?.id,
             items: cards.map((item: any) => ({
-                product: item.id,
+                product: item.product_id,
                 quantity: item.quantity,
-                color: item.color,
+                color: item.color_id,
             })),
         };
 
@@ -111,9 +127,6 @@ export const CheckoutPage = () => {
         (sum: number, item: any) => sum + item.price * item.quantity,
         0
     );
-    // console.log(cards);
-    console.log(userBalance);
-
 
     const finalTotal = cashback && Number(cashback) >= 1000000
         ? (total - Number(cashback))
@@ -140,8 +153,14 @@ export const CheckoutPage = () => {
                 {cards?.map((item: any, idx: number) => (
                     <div key={idx} className="flex gap-[11px] items-center">
                         <img className="h-[89px] w-[67px] object-contain" src={`${item.image}`} alt="" />
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col">
                             <h3 className="font-medium text-sm text-secondColor">{item.title}</h3>
+                            <div className="flex items-center gap-1">
+                                <span className="text-xs font-medium text-secondColor">Rang:</span>
+                                <span className="px-2 py-1 bg-gray-100 text-secondColor rounded-md text-xs font-medium">
+                                    {item.color_name}
+                                </span>
+                            </div>
                             <h5 className="font-semibold text-mainColor">{Number(item.price).toLocaleString("uz-UZ")}</h5>
                             <h3 className="text-xs text-placeholderColor">Miqdor: {item.quantity}</h3>
                         </div>

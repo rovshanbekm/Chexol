@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import request from "../services";
-import { toast } from "react-toastify";
 import { MATERIALS } from "../constants";
 
 export const useGetMaterials= () => {
@@ -15,10 +14,8 @@ export const useGetMaterials= () => {
 
             } catch (error) {
                 console.log(error);
-                toast.error("Yangi xabar qidirishda xatolik");
                 return []
             }
         },
-        staleTime: 1000 * 60 * 10,
     });
 };

@@ -89,6 +89,12 @@ export const CartPage = () => {
                   <h3 className="font-medium text-sm text-secondColor line-clamp-1">
                     {item.title}
                   </h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-medium text-secondColor">Rang:</span>
+                    <span className="px-2 py-1 bg-gray-100 text-secondColor rounded-md text-xs font-medium">
+                      {item.color_name}
+                    </span>
+                  </div>
                   <p className="font-semibold text-base text-mainColor">
                     {Number(item.price).toLocaleString("uz-UZ")} so‘m
                   </p>

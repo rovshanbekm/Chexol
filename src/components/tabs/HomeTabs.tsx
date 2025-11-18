@@ -13,11 +13,11 @@ export const HomeTabs = () => {
 
     return (
         <div
-            className="flex gap-2.5 overflow-x-auto"
+            className="flex items-center gap-2.5 w-full overflow-x-auto"
             style={{ scrollbarWidth: "none" }}>
             <button
                 onClick={handleReset}
-                className={`rounded-[20px] py-[13.5px] px-[15px] border h-12 font-medium text-sm cursor-pointer ${settingsCategoryTab === null
+                className={`rounded-[20px] px-[15px] border h-12 font-medium text-sm cursor-pointer ${settingsCategoryTab === null
                     ? "bg-mainColor text-white"
                     : "bg-white text-secondColor"
                     }`}
@@ -29,7 +29,7 @@ export const HomeTabs = () => {
                     <button
                         key={cat.id}
                         onClick={() => setSettingsCategoryTab(cat.slug || cat.id)}
-                        className={`h-12 rounded-[20px] py-[13.5px] px-[15px] border font-medium text-sm cursor-pointer ${settingsCategoryTab === (cat.slug || cat.id)
+                        className={`h-12 rounded-[20px] px-[15px] text-nowrap border font-medium text-sm cursor-pointer ${settingsCategoryTab === (cat.slug || cat.id)
                             ? "bg-mainColor text-white"
                             : "bg-white text-secondColor"
                             }`}

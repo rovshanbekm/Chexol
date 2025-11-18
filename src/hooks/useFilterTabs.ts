@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import request from "../services";
-import { toast } from "react-toastify";
 import { CATEGORIES } from "../constants";
 
 export const useGetCategories = () => {
@@ -15,10 +14,8 @@ export const useGetCategories = () => {
 
             } catch (error) {
                 console.log(error);
-                toast.error("Yangi xabar qidirishda xatolik");
                 return []
             }
         },
-        staleTime: 1000 * 60 * 10,
     });
 };

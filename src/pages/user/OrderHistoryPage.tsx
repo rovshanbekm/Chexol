@@ -41,7 +41,7 @@ export const OrderHistoryPage = () => {
                                         src={item.image}
                                         alt={item.title}
                                     />
-                                    <div className="p-2.5 flex flex-col flex-1">
+                                    <div className="p-2.5 flex flex-col justify-between flex-1">
                                         <div className="flex items-center justify-between">
                                             <h3 className="font-medium text-sm text-secondColor">
                                                 {item.title}
