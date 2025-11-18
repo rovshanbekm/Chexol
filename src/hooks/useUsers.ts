@@ -93,33 +93,27 @@ export const useEditProfile = () => {
     });
 };
 
-
-
 export const useGetUserByChat = () => {
     return useQuery({
-        queryKey: ["users"],
+        queryKey: ["user-by-chat"],
         queryFn: async () => {
             try {
                 const chat_id = getTelegramUserDataID();
-                console.log("chat_id:", chat_id);
                 if (!chat_id) throw new Error("chat_id topilmadi");
 
-                const url = `${ DOMAIN }${ USERS }user_by_chat/${chat_id}/`;
-                console.log("Request URL:", url);
+                const url = `${DOMAIN}${USERS}user_by_chat/${chat_id}/`;
 
                 const res = await request.get(url, {
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                 });
 
                 const data = res.data;
-                console.log("Response data:", data);
 
-                if (data.access_token && data.refresh_token) {
+                if (data.tokens?.access_token) {
                     setTokens({
-                        access_token: data.access_token,
-                        refresh_token: data.refresh_token,
+                        access_token: data.tokens.access_token,
+                        refresh_token: data.tokens.refresh_token,
+                        user_id: data.id,
                     });
                 }
 
@@ -130,9 +124,10 @@ export const useGetUserByChat = () => {
                 return {};
             }
         },
+        staleTime: 0,
+        gcTime: 0,
     });
 };
-
 
 
 export const useGetUsersReferall = () => {

@@ -4,10 +4,12 @@ import { useGetUserByChat } from "../../hooks"
 
 
 export const HomePage = () => {
-  useGetUserByChat()
+  const { isLoading } = useGetUserByChat();
+
+  if (isLoading) return <div>Yuklanmoqda...</div>;
   return (
     <div className="pt-5 pb-18">
-      
+
       <HomeTabs />
       <HomeCard />
     </div>
