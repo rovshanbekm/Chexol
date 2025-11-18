@@ -13,11 +13,8 @@ export const PaymentPage = () => {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const { data: orders } = useGetOrders();
-    const latestOrder = orders
-        ?.slice()
-        .sort((a:any, b:any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
 
-    const id = latestOrder?.id;
+    const id = orders[0].id;
     const { mutate: uploadProof } = usePostOrdersUpload(id);
 
     const { handleSubmit, reset } = useForm();
@@ -43,7 +40,6 @@ export const PaymentPage = () => {
 
     const onSubmit = () => {
         if (!coverImage) return alert("Chek rasmini yuklang 📸");
-        if (!id) return alert("Buyurtma ID topilmadi ❌");
 
         const formData = new FormData();
         formData.append("payment_proof", coverImage);

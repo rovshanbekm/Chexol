@@ -49,7 +49,6 @@ export const useGetOrders = () => {
                 return []
             }
         },
-        staleTime: 1000 * 60 * 60,
     });
 };
 
@@ -97,3 +96,22 @@ export const useGetOrdersById = (id: string) => {
     });
 };
 
+
+
+export const useGetOrderItems = () => {
+    return useQuery({
+        queryKey: ["orders"],
+        queryFn: async () => {
+            try {
+                const res = await request.get(
+                    `${ORDERS}my_order_items/`
+                );
+                return res?.data ?? [];
+
+            } catch (error) {
+                console.log(error);
+                return []
+            }
+        },
+    });
+};
