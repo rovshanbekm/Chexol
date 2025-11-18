@@ -97,7 +97,7 @@ export const useGetUserByChat = () => {
     const chat_id = getTelegramUserDataID();
 
     return useQuery({
-        queryKey: ["user-by-chat", chat_id],
+        queryKey: ["user_by_chat", chat_id],
         queryFn: async () => {
             const url = `${DOMAIN}${USERS}user_by_chat/${chat_id}/`;
             const res = await request.get(url);
@@ -118,6 +118,7 @@ export const useGetUserByChat = () => {
         retry: 1,
     });
 };
+
 
 
 
