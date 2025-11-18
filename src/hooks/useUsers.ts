@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import request from "../services";
 import { toast } from "react-toastify";
 import { DOMAIN, USERS } from "../constants";
-import { getTelegramUserDataID } from "../services/get_init_data_user_id";
 import { setTokens } from "../utils/token";
 
 export const usePostUsers = () => {
@@ -95,16 +94,14 @@ export const useEditProfile = () => {
 
 
 
-export const useGetUserByChat = () => {
+export const useGetUserByChat = (chat_id:number) => {
     return useQuery({
-        queryKey: ["users"],
+        queryKey: ["users", chat_id],
         queryFn: async () => {
             try {
-                const chat_id = getTelegramUserDataID();
-                console.log("chat_id:", chat_id);
                 if (!chat_id) throw new Error("chat_id topilmadi");
 
-                const url = `${ DOMAIN }${ USERS }user_by_chat/${chat_id}/`;
+                const url = `${ DOMAIN }${ USERS }user_by_chat/1665926394/`;
                 console.log("Request URL:", url);
 
                 const res = await request.get(url, {
