@@ -94,40 +94,31 @@ export const useEditProfile = () => {
 };
 
 export const useGetUserByChat = () => {
+    const chat_id = getTelegramUserDataID();
+
     return useQuery({
-        queryKey: ["user-by-chat"],
+        queryKey: ["user-by-chat", chat_id],
         queryFn: async () => {
-            try {
-                const chat_id = getTelegramUserDataID();
-                if (!chat_id) throw new Error("chat_id topilmadi");
+            const url = `${DOMAIN}${USERS}user_by_chat/${chat_id}/`;
+            const res = await request.get(url);
+            const data = res.data;
 
-                const url = `${DOMAIN}${USERS}user_by_chat/${chat_id}/`;
-
-                const res = await request.get(url, {
-                    headers: { "Content-Type": "application/json" },
+            if (data.tokens?.access_token) {
+                setTokens({
+                    access_token: data.tokens.access_token,
+                    refresh_token: data.tokens.refresh_token,
+                    user_id: data.id,
                 });
-
-                const data = res.data;
-
-                if (data.tokens?.access_token) {
-                    setTokens({
-                        access_token: data.tokens.access_token,
-                        refresh_token: data.tokens.refresh_token,
-                        user_id: data.id,
-                    });
-                }
-
-                return data ?? {};
-            } catch (error) {
-                console.error(error);
-                toast.error("Foydalanuvchini olishda xatolik yuz berdi");
-                return {};
             }
+
+            return data;
         },
-        staleTime: 0,
-        gcTime: 0,
+
+        enabled: !!chat_id,
+        retry: 1,
     });
 };
+
 
 
 export const useGetUsersReferall = () => {
