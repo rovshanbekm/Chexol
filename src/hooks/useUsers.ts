@@ -101,7 +101,7 @@ export const useGetUserByChat = (chat_id:number) => {
             try {
                 if (!chat_id) throw new Error("chat_id topilmadi");
 
-                const url = `${ DOMAIN }${ USERS }user_by_chat/1665926394/`;
+                const url = `${ DOMAIN }${ USERS }user_by_chat/${chat_id}/`;
                 console.log("Request URL:", url);
 
                 const res = await request.get(url, {
