@@ -101,15 +101,20 @@ export const useGetUserByChat = () => {
         queryFn: async () => {
             try {
                 const chat_id = getTelegramUserDataID();
+                console.log("chat_id:", chat_id);
                 if (!chat_id) throw new Error("chat_id topilmadi");
 
-                const res = await request.get(`${DOMAIN}${USERS}user_by_chat/${chat_id}/`, {
+                const url = `${ DOMAIN }${ USERS }user_by_chat/${chat_id}/`;
+                console.log("Request URL:", url);
+
+                const res = await request.get(url, {
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
 
                 const data = res.data;
+                console.log("Response data:", data);
 
                 if (data.access_token && data.refresh_token) {
                     setTokens({
@@ -120,7 +125,8 @@ export const useGetUserByChat = () => {
 
                 return data ?? {};
             } catch (error) {
-                // toast.error("Foydalanuvchini olishda xatolik yuz berdi");
+                console.error(error);
+                toast.error("Foydalanuvchini olishda xatolik yuz berdi");
                 return {};
             }
         },
@@ -137,14 +143,10 @@ export const useGetUsersReferall = () => {
                 const res = await request.get(`${USERS}my-referrals/`);
                 const data = res?.data;
 
-                // data -> {} yoki [] bo‘lishi mumkin
-                // Bizga array kerak, shuning uchun tekshiramiz:
-
                 if (Array.isArray(data)) {
-                    return data;  // agar backend to'g'ridan-to'g'ri massiv qaytarsa
+                    return data;
                 }
 
-                // agar object qaytsa — ichidan array bo'lgan property izlaymiz
                 if (Array.isArray(data?.my_referrals)) {
                     return data.my_referrals;
                 }
@@ -157,7 +159,7 @@ export const useGetUsersReferall = () => {
                     return data.results;
                 }
 
-                return []; // agar hech biri bo‘lmasa
+                return [];
             } catch (error) {
                 console.log(error);
                 return [];

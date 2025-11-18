@@ -5,5 +5,5 @@ export function getTelegramUserDataID(): number | null {
   if (tg && tg.user) {
     return tg?.user.id
   }
-  return 1665926394;
+  return null;
 }
