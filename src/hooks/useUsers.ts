@@ -96,6 +96,16 @@ export const useEditProfile = () => {
 export const useGetUserByChat = () => {
     const chat_id = getTelegramUserDataID();
 
+    // ❗ chat_id yo'q — useQuery chaqirmaymiz
+    if (!chat_id) {
+        return {
+            data: null,
+            isLoading: false,
+            isError: false,
+        };
+    }
+
+    // chat_id bor — endi hookni chaqirish mumkin
     return useQuery({
         queryKey: ["user_by_chat", chat_id],
         queryFn: async () => {
@@ -112,11 +122,9 @@ export const useGetUserByChat = () => {
 
             return data;
         },
-
-        enabled: !!chat_id,
-        retry: 1,
     });
 };
+
 
 
 
