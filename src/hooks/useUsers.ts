@@ -3,7 +3,7 @@ import request from "../services";
 import { toast } from "react-toastify";
 import { DOMAIN, USERS } from "../constants";
 import { getTelegramUserDataID } from "../services/get_init_data_user_id";
-import { setTokens } from "../utils/token";
+import useStore from "../context/store";
 
 export const usePostUsers = () => {
     const qc = useQueryClient();
@@ -104,16 +104,13 @@ export const useGetUserByChat = () => {
             const data = res.data;
 
             if (data.tokens?.access_token) {
-                setTokens({
+                // 🚀 login funksiyasini ishlatamiz
+                useStore.getState().login({
                     access_token: data.tokens.access_token,
                     refresh_token: data.tokens.refresh_token,
                 });
             }
-            console.log(data);
-            
-
             return data;
-            
         },
 
         enabled: !!chat_id,
