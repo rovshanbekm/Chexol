@@ -1,17 +1,26 @@
 import WebApp from "@twa-dev/sdk";
 
 export function getTelegramUserDataID(): number | null {
-  const tg = WebApp.initDataUnsafe;
-  if (tg && tg.user) {
-    return tg?.user.id
+  try {
+    WebApp.ready(); // telegram to'liq ishlashini kutish
+
+    const tg = WebApp.initDataUnsafe;
+    console.log("TG DATA:", tg);
+
+    if (tg?.user?.id) {
+      return tg.user.id;
+    }
+  } catch (err) {
+    console.log("Telegram WebApp xatosi:", err);
   }
+
   return null;
 }
 
 
 // export const getTelegramUserDataID = () => {
 //   if (import.meta.env.DEV) {
-//     return  1665926394; 
+//     return  1665926394;
 //   }
 
 //   try {
