@@ -4,10 +4,10 @@ import { ava } from "../../assets/img"
 import { Button } from "../../components/ui/button"
 import useStore from "../../context/store"
 import { Separator } from "@radix-ui/react-select"
-import { useEffect, useState } from "react"
+import {useEffect, useState } from "react"
 import { DeleteModal } from "../../components/modal"
 import { Input } from "../../components/ui/input"
-import { useEditProfile, useGetCashbacks, useGetUsersProfile } from "../../hooks"
+import { useEditProfile, useGetCashbacks, useGetUserByChat, useGetUsersProfile } from "../../hooks"
 import { useForm } from "react-hook-form"
 
 export const ProfilePage = () => {
@@ -19,6 +19,10 @@ export const ProfilePage = () => {
   const { data: userProfile } = useGetUsersProfile();
   const { mutate: editProfile, isPending } = useEditProfile();
   const { data: cashbacks } = useGetCashbacks()
+
+    const { isLoading } = useGetUserByChat();
+    
+      if (isLoading) return <div>Yuklanmoqda...</div>;
 
   const { register, reset, handleSubmit, setValue, watch } = useForm({
     defaultValues: {

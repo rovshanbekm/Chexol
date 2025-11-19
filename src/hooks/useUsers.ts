@@ -107,7 +107,6 @@ export const useGetUserByChat = () => {
                 setTokens({
                     access_token: data.tokens.access_token,
                     refresh_token: data.tokens.refresh_token,
-                    user_id: data.id,
                 });
             }
 
