@@ -91,13 +91,13 @@ export const CartDetailPage = () => {
                                     key={item.id}
                                     type="button"
                                     onClick={() => setSelectedColor(item.color)}
-                                    className="relative w-4 h-4 rounded-full transition-all cursor-pointer duration-200"
+                                    className="relative w-4 h-4 rounded-full transition-all border cursor-pointer duration-200"
                                     style={{
                                         backgroundColor: item.hex_code || "#999",
 
                                     }}
                                 >
-                                    {isActive && <div className="absolute border-white border-2 size-3 top-1/2 left-1/2 -translate-1/2 rounded-full"></div>}
+                                    {isActive && <div className="absolute border-2 size-3 top-1/2 left-1/2 -translate-1/2 rounded-full"></div>}
                                 </button>
                             );
                         })}
