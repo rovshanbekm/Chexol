@@ -76,13 +76,13 @@ export const CheckoutPage = () => {
 
     useEffect(() => {
         if (userBalance) {
-            const formatted = userBalance?.phone?.replace(
-                /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
-                "+$1 ($2) $3 $4 $5"
-            );
+            // const formatted = userBalance?.phone?.replace(
+            //     /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
+            //     "+$1 ($2) $3 $4 $5"
+            // );
             reset({
                 full_name: userBalance.full_name,
-                phone: formatted ?? "",
+                phone: userBalance?.phone ?? "",
                 address: "",
                 payment_type: "",
                 cashback: "0"

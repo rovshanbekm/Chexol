@@ -14,7 +14,7 @@ export const PaymentPage = () => {
 
     const { data: orders } = useGetOrders();
 
-    const id = orders[0].id;
+    const id = orders?.[0].id;
     const { mutate: uploadProof } = usePostOrdersUpload(id);
 
     const { handleSubmit, reset } = useForm();
