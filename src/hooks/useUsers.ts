@@ -95,6 +95,8 @@ export const useEditProfile = () => {
 
 export const useGetUserByChat = () => {
     const chat_id = getTelegramUserDataID();
+    const login = useStore((state) => state.login);
+    const auth = useStore((state) => state.auth);
 
     return useQuery({
         queryKey: ["user_by_chat", chat_id],
@@ -104,19 +106,21 @@ export const useGetUserByChat = () => {
             const data = res.data;
 
             if (data.tokens?.access_token) {
-                // 🚀 login funksiyasini ishlatamiz
-                useStore.getState().login({
+                login({
                     access_token: data.tokens.access_token,
                     refresh_token: data.tokens.refresh_token,
                 });
             }
+
             return data;
         },
 
-        enabled: !!chat_id,
+        enabled: !!chat_id && !auth, 
         retry: 1,
+        placeholderData: () => (auth ? {} : undefined),
     });
 };
+
 
 
 
