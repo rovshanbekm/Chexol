@@ -7,17 +7,3 @@ export function getTelegramUserDataID(): number | null {
   }
   return null;
 }
-
-
-// export const getTelegramUserDataID = () => {
-//   if (import.meta.env.DEV) {
-//     return  1665926394; 
-//   }
-
-//   try {
-//     const telegram = (window as any)?.Telegram?.WebApp;
-//     return telegram?.initDataUnsafe?.user?.id || null;
-//   } catch (e) {
-//     return null;
-//   }
-// };

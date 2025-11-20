@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useGetFilteredProducts, useGetProducts } from "../../hooks/useProducts";
 import sessionStore from "../../utils/sessionStore";
+import { Loader } from "../loader";
 
 // type FormValues = {
 //     product_id: string;
@@ -32,7 +33,7 @@ export const HomeCard = () => {
   };
 
   const { data: filteredProducts } = useGetFilteredProducts(filterParams);
-  const { data: allProducts } = useGetProducts();
+  const { data: allProducts, isLoading } = useGetProducts();
 
   const list =
     filteredProducts?.length || settingsCategoryTab || activeFilter
@@ -60,7 +61,8 @@ export const HomeCard = () => {
 
   return (
     <>
-      {list?.length === 0 ? (
+      {isLoading ? <Loader /> :
+      list?.length === 0 ? (
         <div className="flex items-center justify-center flex-col pt-[185px]">
           <ShoppingBag className="w-[60px] h-[60px] text-gray-400" />
           <div className="flex flex-col gap-1 items-center pt-5">
