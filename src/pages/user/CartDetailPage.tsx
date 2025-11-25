@@ -149,7 +149,7 @@ export const CartDetailPage = () => {
                         <Plus className="text-mainColor" />
                     </button>
                 </div>
-                <Button type="submit" className="!w-[150px] 2xs:!w-[190px] sm:!w-[214px] font-semibold text-sm 2xs:text-base">
+                <Button type="submit" className="w-[150px]! 2xs:w-[190px]! sm:w-[214px]! font-semibold text-sm 2xs:text-base">
                     Savatga qo’shish
                 </Button>
             </div>

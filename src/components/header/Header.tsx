@@ -47,7 +47,7 @@ export const Header = () => {
 
                         {!isLoading &&
                             products.map((p: any) => (
-                                <Link to={`/products/${p.id}`} key={p.id} className=" flex items-center gap-1.5 hover:bg-gray-50 cursor-pointer">
+                                <Link to={`/products/${p.id}`} key={p.id} className=" flex items-center rounded-[8px] gap-1.5 hover:bg-gray-50 cursor-pointer">
                                     <img
                                         src={`${import.meta.env.VITE_API_URL}${p.image}`}
                                         alt={p.title}

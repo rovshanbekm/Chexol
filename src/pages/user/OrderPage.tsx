@@ -41,7 +41,7 @@ export const OrderPage = () => {
               {order.items.map((item: any) => (
                 <div key={item.id} className="flex w-full border rounded-[12px] overflow-hidden mb-3">
                   <img
-                    className="bg-imgBgColor object-cover h-[131px] w-[101px]"
+                    className="bg-imgBgColor object-cover h-auto w-[101px]"
                     src={item.image}
                     alt={item.title}
                   />

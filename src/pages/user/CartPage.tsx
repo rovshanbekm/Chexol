@@ -80,7 +80,7 @@ export const CartPage = () => {
               className="flex w-full border rounded-[12px] overflow-hidden"
             >
               <img
-                className="bg-imgBgColor object-contain w-[120px] h-[120px]"
+                className="bg-imgBgColor object-cover w-[120px] h-auto"
                 src={item.image}
                 alt={item.title}
               />

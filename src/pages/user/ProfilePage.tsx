@@ -20,7 +20,7 @@ export const ProfilePage = () => {
   const { mutate: editProfile, isPending } = useEditProfile();
   const { data: cashbacks } = useGetCashbacks()
 
-  const { register, reset, handleSubmit, setValue, watch } = useForm({
+  const { register, reset, handleSubmit, setValue, watch, formState:{errors} } = useForm({
     defaultValues: {
       full_name: "",
       phone: "",
@@ -94,13 +94,13 @@ export const ProfilePage = () => {
           </div>
           {auth ? (
             <>
-              <div className="p-4 border border-inputBorderColor rounded-2xl flex items-center gap-4 relative mt-7.5">
+              <div className="px-4 py-3.5 pr-12 border border-inputBorderColor rounded-2xl flex items-center gap-4 relative mt-7.5">
                 <img src={ava} alt="" />
                 <div className="flex flex-col">
                   <h2 className="font-semibold text-xl text-modalTitleColor">{userProfile?.full_name}</h2>
                   <p className="text-xs text-placeholderColor">{userProfile?.phone}</p>
                 </div>
-                <Button onClick={handleEdit} className="w-10 h-10 rounded-[12px] absolute right-4" variant={"outline"}><PenLine className="w-4! h-4!" /></Button>
+                <Button onClick={handleEdit} className="w-10 h-10 rounded-[12px] absolute right-4 top-4" variant={"outline"}><PenLine className="w-4! h-4!" /></Button>
               </div>
 
               <div className="border rounded-[15px] border-inputBorderColor mt-5">
@@ -111,7 +111,7 @@ export const ProfilePage = () => {
                   </div>
                   <ChevronRight className="text-placeholderColor" />
                 </button>
-                <Separator className="h-0.5 bg-inputBorderColor" />
+                <Separator className="h-px bg-inputBorderColor!" />
                 <button onClick={() => navigate('/cashback')} className="flex items-center justify-between w-full p-4 cursor-pointer">
                   <div className="flex gap-3 items-center">
                     <HandCoins className="text-mainColor" />
@@ -162,11 +162,13 @@ export const ProfilePage = () => {
           <div className="flex flex-col gap-7.5 mt-7.5 pb-4">
             <div className="flex flex-col gap-[5px]">
               <p className="text-base leading-5 text-secondColor">F.I.O</p>
-              <Input {...register("full_name")} placeholder="F.I.O" className="h-12 rounded-[12px]" />
+              <Input {...register("full_name", { required: "Ism kiritilishi majburiy" })} placeholder="F.I.O" className="h-12 rounded-[12px]" />
+            {errors.full_name && <p className="text-sm text-red-500">{errors.full_name.message}</p>}
             </div>
             <div className="flex flex-col gap-[5px]">
               <p className="text-base leading-5 text-secondColor">Telefon raqam</p>
-              <Input {...register("phone")} value={valueinput} onChange={handlePhoneChange} placeholder="Telefon raqam" className="h-12 rounded-[12px]" />
+              <Input {...register("phone", { required: "Telefon raqam kiritilishi majburiy" })} value={valueinput} onChange={handlePhoneChange} placeholder="Telefon raqam" className="h-12 rounded-[12px]" />
+              {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
             </div>
           </div>
           <Button disabled={isPending} type="submit" className="mt-auto rounded-[20px] w-full"> {isPending ? "Saqlanmoqda..." : "Saqlash"}</Button>

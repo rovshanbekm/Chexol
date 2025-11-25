@@ -77,13 +77,13 @@ export const HomeCard = () => {
       ) : (
         <div className="grid grid-cols-2 gap-2.5 pt-5">
           {list?.map((item: any) => (
-            <Link to={`/products/${item.id}`} key={item.id}>
+            <Link to={`/products/${item.id}`} key={item.id} className="border rounded-[12px]">
               <img
-                className="w-full object-contain rounded-t-[20px]"
+                className="w-full object-contain rounded-t-[12px]"
                 src={`${import.meta.env.VITE_API_URL}${item?.image}`}
                 alt={item?.title}
               />
-              <div className="flex flex-col gap-2.5 border-x border-b p-2.5 rounded-b-[12px]">
+              <div className="flex flex-col gap-2.5  p-2.5">
                 <h2 className="font-medium text-sm text-secondColor line-clamp-1">
                   {item?.title}
                 </h2>

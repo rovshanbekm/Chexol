@@ -41,7 +41,7 @@ export const OrderHistoryPage = () => {
                                         src={item.image}
                                         alt={item.title}
                                     />
-                                    <div className="p-2.5 flex flex-col justify-between flex-1">
+                                    <div className="p-4 flex flex-col justify-between flex-1">
                                         <div className="flex items-center justify-between">
                                             <h3 className="font-medium text-sm text-secondColor">
                                                 {item.title}
@@ -68,9 +68,9 @@ export const OrderHistoryPage = () => {
                                                 </p>
                                             )}
                                         </div>
-                                        <div className="flex items-center justify-between pt-5">
+                                        <div className="flex items-center justify-between ">
                                             <p className="font-semibold text-base text-mainColor">
-                                                {item.price * item.quantity} so’m
+                                                {Number(item.price * item.quantity).toLocaleString("uz-UZ")} so’m
                                             </p>
                                             <Button
                                                 onClick={() => {setOpen(true), setSelectedOrderId(order.id)}}

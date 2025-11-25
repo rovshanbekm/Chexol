@@ -76,17 +76,19 @@ export const CheckoutPage = () => {
 
     useEffect(() => {
         if (userBalance) {
-            // const formatted = userBalance?.phone?.replace(
-            //     /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
-            //     "+$1 ($2) $3 $4 $5"
-            // );
-            reset({
-                full_name: userBalance.full_name,
-                phone: userBalance?.phone ?? "",
-                address: "",
-                payment_type: "",
-                cashback: "0"
-            });
+            const formatted = userBalance?.phone?.replace(
+                /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
+                "+$1 ($2) $3 $4 $5"
+            );
+            setTimeout(() => {
+                reset({
+                    full_name: userBalance.full_name,
+                    phone: formatted ?? "",
+                    address: "",
+                    payment_type: "",
+                    cashback: "0"
+                });
+            }, 50)
         }
     }, [userBalance, reset]);
 
@@ -152,7 +154,7 @@ export const CheckoutPage = () => {
             <div className="border rounded-2xl p-4 flex flex-col gap-4 mt-2.5">
                 {cards?.map((item: any, idx: number) => (
                     <div key={idx} className="flex gap-[11px] items-center">
-                        <img className="h-[89px] w-[67px] object-contain" src={`${item.image}`} alt="" />
+                        <img className="h-[89px] w-[67px] object-cover rounded-[12px]" src={`${item.image}`} alt="" />
                         <div className="flex flex-col">
                             <h3 className="font-medium text-sm text-secondColor">{item.title}</h3>
                             <div className="flex items-center gap-1">
@@ -203,13 +205,13 @@ export const CheckoutPage = () => {
                 ) : (
                     <div className="flex flex-col gap-2.5">
                         <h2 className="font-semibold text-base text-secondColor pt-7.5">
-                            Yetkazib berish
+                            Yetkazib berish manzili
                         </h2>
                         {addresses?.map((item: any) => (
                             <div key={item.id} className="border rounded-lg pr-2 pt-2 pb-5 pl-[18px] flex justify-between" >
                                 <div className="pt-3">
                                     <h3 className="font-semibold text-secondColor capitalize">
-                                        {item?.street ?? "Ko‘cha kiritilmagan"} tumani,
+                                        {item?.region_name ?? "Shahar tanlanmagan"}, {item?.street ?? "Ko‘cha kiritilmagan"}
                                     </h3>
                                     <p className="text-placeholderColor flex items-center text-sm">
                                         {item?.entrance && <span>{item.entrance}</span>}

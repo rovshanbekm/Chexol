@@ -96,7 +96,7 @@ export const LocationPage = () => {
                         name="region"
                         control={control}
                         render={({ field }) => (
-                            <Select onValueChange={field.onChange} value={field.value}>
+                            <Select key={field.value} onValueChange={field.onChange} value={field.value || ""}>
                                 <SelectTrigger className="w-full h-12! rounded-[12px]">
                                     <SelectValue
                                         placeholder="Hududingizni tanlang"
@@ -105,8 +105,8 @@ export const LocationPage = () => {
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        {regions?.map((item: any) => (
-                                            <SelectItem key={item.id} value={item.id}>
+                                        {regions?.map((item: any, i:number) => (
+                                            <SelectItem key={i} value={item.id ?? ""}>
                                                 {item.name}
                                             </SelectItem>
                                         ))}
@@ -121,8 +121,8 @@ export const LocationPage = () => {
                     <label className="text-base leading-5 text-secondColor">Tuman</label>
                     <Input
                         {...register("street", { required: true })}
-                        className="rounded-[12px] py-3 px-4 h-12"
-                        placeholder="Yangiobod ko’chasi"
+                        className="rounded-[12px] py-3 px-4 h-12 capitalize"
+                        placeholder="Yunusobod tumani"
                     />
                 </div>
 
