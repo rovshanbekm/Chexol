@@ -95,7 +95,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                                     Summa:
                                 </h4>
                                 <p className="font-medium text-sm leading-6 text-secondColor">
-                                    {orders.total_price} so'm
+                                    {Number(orders.total_price).toLocaleString("uz-UZ")} so'm
                                 </p>
                             </div>
 

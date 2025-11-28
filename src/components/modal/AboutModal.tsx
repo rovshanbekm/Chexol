@@ -2,6 +2,8 @@
 import { X } from "lucide-react";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
 import { useGetOrdersById } from "../../hooks";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface AboutModalProps {
     open: boolean;
@@ -11,6 +13,7 @@ interface AboutModalProps {
 
 export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
     const { data: orders } = useGetOrdersById(orderId as string)
+    const navigate = useNavigate()
 
 
     const formatDate = (isoString: string) => {
@@ -23,6 +26,11 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
             date.getFullYear()
         );
     };
+    const handleNavigate = () => {
+        if (orders?.payment_type === "card") {
+            navigate("/payment")
+        }
+    }
     return (
         <AlertDialog open={open} onOpenChange={toggleOpen} >
             <div className="relative">
@@ -32,47 +40,57 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
                         <AlertDialogTitle className="font-semibold text-xl text-modalTitleColor">
                             Buyurtma tafsiloti
                         </AlertDialogTitle>
-                        {orders?.items?.map((item: any) => (
-                            <div key={item.id} className="flex items-start! flex-col gap-3 pt-3">
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Buyurtma:</h4>
-                                    <p className="font-medium text-sm leading-6 text-secondColor">{orders?.order_number}</p>
-                                </div>
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Sana:</h4>
-                                    <p className="font-medium text-sm leading-6 text-secondColor">{formatDate(orders.created_at)}</p>
-                                </div>
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Holati:</h4>
-                                    {orders.payment_status === "paid" ? (
-                                        <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">
-                                            To'langan
-                                        </p>
-                                    ) : orders.payment_status === "waiting" ? (
-                                        <p className="text-xs text-waitingStatus px-2.5 h-[33px] bg-waitingStatus/7 rounded-[10px] flex items-center justify-center">
-                                            Kutilmoqda
-                                        </p>
-                                    ) : (
-                                        <p className="text-xs text-logoutColor w-[82px] h-[33px] bg-logoutColor/7 rounded-[10px] flex items-center justify-center">
-                                            To'lanmagan
-                                        </p>
-                                    )}
-                                </div>
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Mahsulot:</h4>
-                                    <p className="font-medium text-sm leading-6 text-secondColor flex gap-[5px] items-center"><span className="line-clamp-1">{item?.title}</span> <X size={10} /> {item?.quantity}</p>
-                                </div>
-                                <div className="flex gap-10">
-                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Manzil:</h4>
-                                    <p className="font-medium text-sm leading-6 text-secondColor">Toshkent, Mirobod 12</p>
-                                </div>
-                                {item.tracking_code &&
-                                    <div className="flex gap-10">
-                                        <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Treking:</h4>
-                                        <p className="font-medium text-sm leading-6 text-mainColor">{item.tracking_code}</p>
-                                    </div>}
+                        <div className="flex flex-col gap-3 pt-3">
+                            <div className="flex gap-10">
+                                <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Buyurtma:</h4>
+                                <p className="font-medium text-sm leading-6 text-secondColor">{orders?.order_number}</p>
                             </div>
-                        ))}
+
+                            <div className="flex gap-10">
+                                <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Sana:</h4>
+                                <p className="font-medium text-sm leading-6 text-secondColor">{formatDate(orders?.created_at)}</p>
+                            </div>
+
+                            <div className="flex gap-10">
+                                <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Holati:</h4>
+                                {orders?.payment_status === "paid" ? (
+                                    <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">To'langan</p>
+                                ) : orders?.payment_status === "waiting" ? (
+                                    <p className="text-xs text-waitingStatus px-2.5 h-[33px] bg-waitingStatus/7 rounded-[10px] flex items-center justify-center">Kutilmoqda</p>
+                                ) : (
+                                    <p className="text-xs text-logoutColor w-[82px] h-[33px] bg-logoutColor/7 rounded-[10px] flex items-center justify-center">To'lanmagan</p>
+                                )}
+                            </div>
+
+                            <div className="flex  gap-10">
+                                <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Mahsulot:</h4>
+                                <div className="flex flex-col gap-1">
+                                    {orders?.items?.map((item: any) => (
+                                        <div className="flex items-center gap-[5px]">
+                                            <p className="font-medium text-sm leading-6 text-secondColor">{item?.title}</p>
+                                            <X className="size-2.5" />
+                                            <p className="font-medium text-sm leading-6 text-secondColor">{item?.quantity} dona</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-10">
+                                <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Manzil:</h4>
+                                <p className="font-medium text-sm leading-6 text-secondColor">{orders?.address_region_name}, {orders?.address_name}</p>
+                            </div>
+
+                            {orders?.tracking_code && (
+                                <div className="flex items-center gap-10">
+                                    <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Treking:</h4>
+                                    <p className="font-medium text-sm leading-6 text-mainColor">{orders?.tracking_code}</p>
+                                </div>
+                            )}
+
+                            {orders?.payment_status === "waiting" && (
+                                <Button className="h-9 w-[140px] mx-auto" onClick={handleNavigate}>Qayta to'lash</Button>
+                            )}
+                        </div>
                     </AlertDialogHeader>
                 </AlertDialogContent>
             </div>
