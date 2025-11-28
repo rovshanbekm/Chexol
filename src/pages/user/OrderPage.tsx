@@ -48,7 +48,7 @@ export const OrderPage = () => {
                   <div className="p-4 flex flex-col flex-1 justify-between">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium text-sm text-secondColor">
-                        {item.title}
+                        {item.title} 
                       </h3>
                       {order.payment_status === "paid" ? (
                         <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">
