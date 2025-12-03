@@ -1,13 +1,12 @@
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
 import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useGetBusinessDetail } from "../../hooks/useProducts";
 
 export const Header = () => {
     const [query, setQuery] = useState("");
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const { pathname } = useLocation();
     const { data: products = [], isLoading } = useGetBusinessDetail(query);
 
