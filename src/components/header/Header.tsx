@@ -59,9 +59,9 @@ export const Header = () => {
                     </div>
                 )}
             </div>
-            <Button variant={"outline"} onClick={() => navigate('/filter')}>
+            {/* <Button variant={"outline"} onClick={() => navigate('/filter')}>
                 <SlidersHorizontal size={24} />
-            </Button>
+            </Button> */}
         </div>
     )
 }

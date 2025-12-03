@@ -125,6 +125,9 @@ export const CartDetailPage = () => {
                 <div className="pt-2.5 flex flex-col gap-2.5">
                     <h2 className="font-semibold text-lg">{productsById?.title}</h2>
                     <h4 className="text-sm text-placeholderColor">{productsById?.description}</h4>
+                    {productsById?.stock < 70 && (
+                        <p className="text-sm font-medium">Miqdor: {productsById?.stock} ta</p>
+                    )}
                     <h3 className="font-semibold text-xl text-mainColor">{Number(productsById?.price).toLocaleString("uz-UZ")} so’m</h3>
                 </div>
             </div>

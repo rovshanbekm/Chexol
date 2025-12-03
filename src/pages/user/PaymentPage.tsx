@@ -5,14 +5,16 @@ import { useRef, useState } from "react";
 import { Button } from "../../components/ui/button";
 import { useForm } from "react-hook-form";
 import { useGetOrders, usePostOrdersUpload } from "../../hooks";
+import { toast } from "react-toastify";
 
 export const PaymentPage = () => {
     const navigate = useNavigate();
     const [preview, setPreview] = useState<string | null>(null);
     const [coverImage, setCoverImage] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const referralLink = `9860 0000 0000 0000`;
 
-    const { data: orders } = useGetOrders();
+    const { data: orders } = useGetOrders(); 
 
     const id = orders?.[0].id;
     const { mutate: uploadProof } = usePostOrdersUpload(id);
@@ -39,7 +41,7 @@ export const PaymentPage = () => {
     };
 
     const onSubmit = () => {
-        if (!coverImage) return alert("Chek rasmini yuklang 📸");
+        if (!coverImage) return console.log("Chek rasmini yuklang 📸");
 
         const formData = new FormData();
         formData.append("payment_proof", coverImage);
@@ -52,6 +54,15 @@ export const PaymentPage = () => {
             },
         });
     };
+    
+        const handleCopy = async () => {
+            try {
+                await navigator.clipboard.writeText(referralLink);
+                toast.success("Referal link nusxalandi");
+            } catch (err) {
+                console.error(err);
+            }
+        };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="h-full flex flex-col pb-20">
@@ -68,7 +79,7 @@ export const PaymentPage = () => {
                 <h2 className="font-semibold text-base text-secondColor">Qabul qiluvchi</h2>
                 <div className="border border-inputBorderColor rounded-[12px] p-4 mt-2.5">
                     <p className="font-medium text-base text-secondColor flex items-center gap-2.5">
-                        9860 0000 0000 0000 <Copy className="text-mainColor" size={16} />
+                        9860 0000 0000 0000 <button onClick={handleCopy}><Copy className="text-mainColor" size={16} /></button>
                     </p>
                     <div className="flex items-center justify-between">
                         <p className="text-sm text-placeholderColor pt-[7px]">Abdullayev Salim</p>

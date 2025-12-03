@@ -6,6 +6,7 @@ import { Button } from "../../components/ui/button"
 import { useGetAddress, useGetBuskets, useGetUsersProfile, usePostOrders } from "../../hooks"
 import { useEffect, useState } from "react"
 import { Checkbox } from "../../components/ui/checkbox"
+import { toast } from "react-toastify"
 
 
 type FormValues = {
@@ -94,9 +95,13 @@ export const CheckoutPage = () => {
 
 
     const onSubmit = (data: FormValues) => {
+        const formatted = userBalance?.phone?.replace(
+            /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
+            "+$1 ($2) $3 $4 $5"
+        );
         const payload: any = {
             full_name: userBalance.full_name,
-            phone: valueinput,
+            phone: formatted,
             address: addresses?.[0]?.id,
             items: cards.map((item: any) => ({
                 product: item.product_id,
@@ -290,6 +295,10 @@ export const CheckoutPage = () => {
                             onChange={(e) => {
                                 setValue("payment_type", e.target.value);
                                 setValue("cashback", "0");
+                                if (e.target.value === "payme" || e.target.value === "click") {
+                                    toast.error("Eslatma: Bu to'lov turi hali faol emas.");
+                                }
+                                
                             }}
                             className="w-[18px] h-[18px] accent-mainColor"
                         />

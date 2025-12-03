@@ -52,7 +52,7 @@ export const CashbackPage = () => {
             <div className="flex flex-col gap-[5px] pt-7.5">
                 <h3 className="font-semibold text-xl text-secondColor">Keshbekni oshiring</h3>
                 <p className="text-base text-placeholderColor">Do‘stlaringizni taklif qiling va xaridlar orqali qo‘shimcha keshbek oling</p>
-                <Button onClick={handleCopy} className="font-semibold text-base w-[218px] mt-[15px]">Referal linkni ulashish</Button>
+                <Button onClick={handleCopy} className="font-semibold text-base w-[218px] mt-[15px]">Do'stlaringizga ulashing</Button>
             </div>
             <ReferalTable />
         </>
