@@ -69,6 +69,9 @@ export const CartDetailPage = () => {
         });
     };
 
+    const selectedImage = productsById?.images[0];
+    const stock = selectedImage?.stock;
+
     const handleMinus = () => {
         if (count > 1) setCount(count - 1);
     };
@@ -151,6 +154,7 @@ export const CartDetailPage = () => {
                     <button
                         type="button"
                         onClick={handlePlus}
+                        disabled={count >= stock}
                         className="w-8 border h-[34px] bg-white cursor-pointer rounded-[8px] flex items-center justify-center"
                     >
                         <Plus className="text-mainColor" />
