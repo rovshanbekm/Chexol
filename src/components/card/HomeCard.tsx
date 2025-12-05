@@ -79,7 +79,7 @@ export const HomeCard = () => {
           {list?.map((item: any) => (
             <Link to={`/products/${item.id}`} key={item.id} className="border rounded-[12px]">
               <img
-                className="w-full object-contain rounded-t-[12px]"
+                className="w-full object-cover rounded-t-[12px] max-h-[157px] h-full"
                 src={`${import.meta.env.VITE_API_URL}${item?.image}`}
                 alt={item?.title}
               />
