@@ -60,7 +60,7 @@ export const CartPage = () => {
         )}
       </div>
 
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="mt-4 flex flex-col gap-3 pb-32">
         {buskets?.length === 0 ? (
           <div className="flex items-center justify-center flex-col pt-[185px]">
             <ShoppingCart size={76} className="text-iconColor mb-5" />
@@ -128,9 +128,20 @@ export const CartPage = () => {
             <h3 className="font-semibold text-[18px]">Jami:</h3>
             <p className="font-semibold text-[18px]"> {total?.toLocaleString("uz-UZ")} so‘m</p>
           </div>
-          <Button onClick={() => navigate("/checkout")} className="w-full mt-2.5">
+          <Button
+            className="w-full mt-2.5"
+            onClick={() => {
+              if (total <= 500000) {
+                toast.error("Buyurtma umumiy summasi 500 000 so‘mdan oshishi kerak.");
+                return;
+              }
+
+              navigate("/checkout");
+            }}
+          >
             To’lov qilish
           </Button>
+
         </div>
       )}
 
