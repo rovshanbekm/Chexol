@@ -15,7 +15,8 @@ type FormValues = {
     address?: string;
     payment_type?: string;
     items?: [{ product: string, quantity: number }];
-    cashback?: string
+    cashback?: string;
+    delivery_type?:string
 };
 
 export const CheckoutPage = () => {
@@ -27,10 +28,11 @@ export const CheckoutPage = () => {
     const [valueinput, setValueinput] = useState("")
 
     const { register, handleSubmit, reset, watch, setValue, control } = useForm<FormValues>({
-        defaultValues: { full_name: "", phone: "", address: "", payment_type: "", cashback: "0", },
+        defaultValues: { full_name: "", phone: "", address: "", payment_type: "", cashback: "0", delivery_type: "" },
     })
 
     const payment_type = watch("payment_type")
+    const delivery_type = watch("delivery_type")
     const cashback = watch("cashback")
 
     useEffect(() => {
@@ -101,7 +103,7 @@ export const CheckoutPage = () => {
         );
         const payload: any = {
             full_name: userBalance.full_name,
-            phone: formatted,
+            phone: formatted ?? userBalance.phone,
             address: addresses?.[0]?.id,
             items: cards.map((item: any) => ({
                 product: item.product_id,
@@ -116,6 +118,9 @@ export const CheckoutPage = () => {
 
         if (data.cashback && Number(data.cashback) > 0) {
             payload.cashback = data.cashback
+        }
+        if (data.delivery_type) {
+            payload.delivery_type = data.delivery_type;
         }
 
         createOrders(payload, {
@@ -232,47 +237,41 @@ export const CheckoutPage = () => {
 
             </div>
 
-            {/* <div>
+            <div>
                 <h3 className="font-semibold text-base text-secondColor pt-7.5 pb-2.5">
                     Yetkazib berish turi
                 </h3>
+                {["BTS", "EMU", "TAXI", "TRUCK"].map((type) => (
+                    <label
+                        key={type}
+                        htmlFor={type}
+                        className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${delivery_type === type
+                            ? "border-mainColor/50 bg-imgBgColor"
+                            : "border-borderColor"
+                            }`}
+                    >
+                        <input
+                            id={type}
+                            type="radio"
+                            value={type}
+                            {...register("delivery_type")}
+                            onChange={(e) => {
+                                setValue("delivery_type", e.target.value);
+                            }}
+                            className="w-[18px] h-[18px] accent-mainColor"
+                        />
 
-                <label
-                    htmlFor="courier"
-                    className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer ${deliveryType === "courier"
-                        ? "border-mainColor/50 bg-imgBgColor"
-                        : "border-borderColor"
-                        }`}>
-                    <input
-                        id="courier"
-                        type="radio"
-                        name="deliveryType"
-                        value="courier"
-                        checked={deliveryType === "courier"}
-                        onChange={() => setValue("deliveryType", "courier")}
-                        className="w-[18px] h-[18px] accent-mainColor"
-                    />
-                    <span className="text-sm text-secondColor">Kuryer orqali (1–2 kun)</span>
-                </label>
-
-                <label
-                    htmlFor="pickup"
-                    className={`flex gap-[15px] py-3.5 pl-4 border items-center rounded-[12px] cursor-pointer mt-2.5 ${deliveryType === "pickup"
-                        ? "border-mainColor/50 bg-imgBgColor"
-                        : "border-borderColor"
-                        }`}>
-                    <input
-                        id="pickup"
-                        type="radio"
-                        name="deliveryType"
-                        value="pickup"
-                        checked={deliveryType === "pickup"}
-                        onChange={() => setValue("deliveryType", "pickup")}
-                        className="w-[18px] h-[18px] accent-mainColor"
-                    />
-                    <span className="text-sm text-secondColor">O‘zi olib ketish</span>
-                </label>
-            </div> */}
+                        <span className="text-sm text-secondColor">
+                            {type === "BTS"
+                                ? "BTS pochta orqali"
+                                : type === "EMU"
+                                    ? "EMU pochta orqali":
+                                    type === "TAXI"
+                                    ? "Taksi orqali" : "Yuk mashina orqali" }
+                        </span>
+                    </label>
+                ))}
+            </div>
 
             <div className={`${userBalance && userBalance >= 1000000 ? "pt-7.5" : " pb-40"}`}>
                 <h3 className="font-semibold text-base text-secondColor pt-7.5 pb-2.5">
@@ -298,7 +297,7 @@ export const CheckoutPage = () => {
                                 if (e.target.value === "payme" || e.target.value === "click") {
                                     toast.error("Eslatma: Bu to'lov turi hali faol emas.");
                                 }
-                                
+
                             }}
                             className="w-[18px] h-[18px] accent-mainColor"
                         />
