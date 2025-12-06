@@ -109,6 +109,7 @@ export const CheckoutPage = () => {
                 product: item.product_id,
                 quantity: item.quantity,
                 color: item.color_id,
+                price:item.price,
             })),
         };
 
