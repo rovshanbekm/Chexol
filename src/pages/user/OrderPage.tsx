@@ -38,17 +38,17 @@ export const OrderPage = () => {
         <div className="pt-[23px]">
           {orders?.map((order: any) => (
             <div key={order.id}>
-              {order.items.map((item: any) => (
-                <div key={item.id} className="flex w-full border rounded-[12px] overflow-hidden mb-3">
+              {order.items[0] && (
+                <div className="flex w-full border rounded-[12px] overflow-hidden mb-3">
                   <img
                     className="bg-imgBgColor object-cover h-auto w-[101px]"
-                    src={item.image}
-                    alt={item.title}
+                    src={order.items[0].image}
+                    alt={order.items[0].title}
                   />
                   <div className="p-4 flex flex-col flex-1 justify-between">
                     <div className="flex items-center justify-between">
                       <h3 className="font-medium text-sm text-secondColor">
-                        {item.title} 
+                        {order.items[0].title}
                       </h3>
                       {order.payment_status === "paid" ? (
                         <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">
@@ -67,12 +67,12 @@ export const OrderPage = () => {
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-xs font-medium text-secondColor">Rang:</span>
                       <span className="px-2 py-1 bg-gray-100 text-secondColor rounded-md text-xs font-medium">
-                        {item.color_name}
+                        {order.items[0].color_name}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <p className="font-semibold text-base text-mainColor">
-                        {Number(item.price * item.quantity).toLocaleString("uz-UZ")} so’m
+                        {Number(order.total_price).toLocaleString("uz-UZ")} so’m
                       </p>
                       <Button
                         onClick={() => {
@@ -87,7 +87,8 @@ export const OrderPage = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              )}
+
             </div>
           ))}
           <AboutModal open={open} toggleOpen={() => setOpen(!open)} orderId={selectedOrderId} />

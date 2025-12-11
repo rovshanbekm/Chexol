@@ -34,31 +34,31 @@ export const OrderHistoryPage = () => {
                 <div className="pt-[23px]">
                     {orders?.map((order: any) => (
                         <div key={order.id}>
-                            {order.items.map((item: any) => (
-                                <div key={item.id} className="flex w-full border rounded-[12px] overflow-hidden mb-3">
+                            {order?.items?.[0] && (
+                                <div className="flex w-full border rounded-[12px] overflow-hidden mb-3">
                                     <img
                                         className="bg-imgBgColor object-cover h-[131px] w-[101px]"
-                                        src={item.image}
-                                        alt={item.title}
+                                        src={order?.items[0].image}
+                                        alt={order?.items[0].title}
                                     />
                                     <div className="p-4 flex flex-col justify-between flex-1">
                                         <div className="flex items-center justify-between">
                                             <h3 className="font-medium text-sm text-secondColor">
-                                                {item.title}
+                                                {order?.items[0].title}
                                             </h3>
-                                            {order.status === "delivered" ? (
+                                            {order?.status === "delivered" ? (
                                                 <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">
                                                     Yetkazildi
                                                 </p>
-                                            ) : order.status === "pending" ? (
+                                            ) : order?.status === "pending" ? (
                                                 <p className="text-xs text-pendingColorStatus px-2.5 h-[33px] bg-pendingColorStatus/7 rounded-[10px] flex items-center justify-center">
                                                     Kutilmoqda
                                                 </p>
-                                            ) : order.status === "in_progress" ? (
+                                            ) : order?.status === "in_progress" ? (
                                                 <p className="text-xs text-waitingStatus w-[82px] h-[33px] bg-waitingStatus/7 rounded-[10px] flex items-center justify-center">
                                                     Tayyorlanmoqda
                                                 </p>
-                                            ) : order.status === "on_the_way" ? (
+                                            ) : order?.status === "on_the_way" ? (
                                                 <p className="text-xs text-onTheWayStatus w-[82px] h-[33px] bg-onTheWayStatus/7 rounded-[10px] flex items-center justify-center">
                                                     Yetkazilmoqda
                                                 </p>
@@ -68,12 +68,12 @@ export const OrderHistoryPage = () => {
                                                 </p>
                                             )}
                                         </div>
-                                        <div className="flex items-center justify-between ">
+                                        <div className="flex items-center justify-between">
                                             <p className="font-semibold text-base text-mainColor">
-                                                {Number(item.price * item.quantity).toLocaleString("uz-UZ")} so’m
+                                                {Number(order?.items[0].price * order?.items[0].quantity).toLocaleString("uz-UZ")} so’m
                                             </p>
                                             <Button
-                                                onClick={() => {setOpen(true), setSelectedOrderId(order.id)}}
+                                                onClick={() => { setOpen(true); setSelectedOrderId(order?.id); }}
                                                 className="rounded-[12px]! h-[37px]! w-[76px]"
                                                 variant={"outline"}
                                             >
@@ -82,7 +82,7 @@ export const OrderHistoryPage = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                            )}
                         </div>
                     ))}
                     <OrderHistoryModal open={open} toggleOpen={() => setOpen(!open)} orderId={selectedOrderId} />

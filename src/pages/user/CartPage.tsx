@@ -9,13 +9,11 @@ import { toast } from "react-toastify";
 
 export const CartPage = () => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
   const { data: buskets } = useGetBuskets();
-
   const { mutate: updateBusket } = useUpdateBusket();
-  const { mutate: deleteBusket } = useDeleteBusketsById()
-
+  const { mutate: deleteBusket } = useDeleteBusketsById();
 
   const handlePlus = (item: any) => {
     if (item.quantity < item.stock) {
@@ -37,12 +35,27 @@ export const CartPage = () => {
         stock: item.stock,
       });
     } else if (item.quantity === 1) {
-      deleteBusket(item.id)
+      deleteBusket(item.id);
     }
   };
 
   const total = buskets?.reduce(
-    (sum: number, item: any) => sum + item.price * item.quantity,
+    (sum: number, item: any) => {
+      let appliedPrice = Number(item.price);
+
+      if (item.discount_price?.length) {
+        const sortedDiscounts = [...item.discount_price].sort((a, b) => b.count - a.count);
+
+        for (const discount of sortedDiscounts) {
+          if (item.quantity >= discount.count) {
+            appliedPrice = Number(discount.price);
+            break;
+          }
+        }
+      }
+
+      return sum + appliedPrice * item.quantity;
+    },
     0
   );
 
@@ -75,50 +88,58 @@ export const CartPage = () => {
             <Button className="mt-5" onClick={() => navigate("/")}>Aksessuarlarni ko’rish</Button>
           </div>
         ) : (
-          buskets?.map((item: any, index: string) => (
-            <div
-              key={index}
-              className="flex w-full border rounded-[12px] overflow-hidden"
-            >
-              <img
-                className="bg-imgBgColor object-cover w-[120px] h-auto"
-                src={item.image}
-                alt={item.title}
-              />
-              <div className="flex-1 p-2.5 flex flex-col justify-between relative">
-                <div>
-                  <h3 className="font-medium text-sm text-secondColor line-clamp-1">
-                    {item.title}
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-secondColor">Rang:</span>
-                    <span className="px-2 py-1 bg-gray-100 text-secondColor rounded-md text-xs font-medium">
-                      {item.color_name}
-                    </span>
-                  </div>
-                  <p className="font-semibold text-base text-mainColor">
-                    {Number(item.price).toLocaleString("uz-UZ")} so‘m
-                  </p>
-                </div>
+          buskets?.map((item: any, index: string) => {
+            let appliedPrice = Number(item.price);
 
-                <div className="p-[5px] flex items-center gap-2.5 rounded-[20px] self-end">
-                  <button
-                    onClick={() => handleMinus(item)}
-                    className="w-8 h-[34px] bg-white border rounded-[8px] flex items-center justify-center cursor-pointer"
-                  >
-                    <Minus className="text-mainColor" />
-                  </button>
-                  <p className="border flex items-center justify-center rounded-[6px] px-[29px] py-[5px] font-medium text-base text-secondColor">{item.quantity}</p>
-                  <button
-                    onClick={() => handlePlus(item)}
-                    className="w-8 h-[34px] bg-white border rounded-[8px] flex items-center justify-center cursor-pointer"
-                  >
-                    <Plus className="text-mainColor" />
-                  </button>
+            if (item.discount_price?.length) {
+              const sortedDiscounts = [...item.discount_price].sort((a, b) => b.count - a.count);
+
+              for (const discount of sortedDiscounts) {
+                if (item.quantity >= discount.count) {
+                  appliedPrice = Number(discount.price);
+                  break;
+                }
+              }
+            }
+
+            return (
+              <div key={index} className="flex w-full border rounded-[12px] overflow-hidden">
+                <img
+                  className="bg-imgBgColor object-cover w-[120px] h-auto"
+                  src={item.image}
+                  alt={item.title}
+                />
+                <div className="flex-1 p-2.5 flex flex-col justify-between relative">
+                  <div>
+                    <h3 className="font-medium text-sm text-secondColor line-clamp-1">{item.title}</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-medium text-secondColor">Rang:</span>
+                      <span className="px-2 py-1 bg-gray-100 text-secondColor rounded-md text-xs font-medium">{item.color_name}</span>
+                    </div>
+                    <p className="font-semibold text-base text-mainColor">
+                      {appliedPrice.toLocaleString("uz-UZ")} so‘m
+                    </p>
+                  </div>
+
+                  <div className="p-[5px] flex items-center gap-2.5 rounded-[20px] self-end">
+                    <button
+                      onClick={() => handleMinus(item)}
+                      className="w-8 h-[34px] bg-white border rounded-[8px] flex items-center justify-center cursor-pointer"
+                    >
+                      <Minus className="text-mainColor" />
+                    </button>
+                    <p className="border flex items-center justify-center rounded-[6px] px-[29px] py-[5px] font-medium text-base text-secondColor">{item.quantity}</p>
+                    <button
+                      onClick={() => handlePlus(item)}
+                      className="w-8 h-[34px] bg-white border rounded-[8px] flex items-center justify-center cursor-pointer"
+                    >
+                      <Plus className="text-mainColor" />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
@@ -126,7 +147,7 @@ export const CartPage = () => {
         <div className="px-[22px] py-2.5 border rounded-t-[20px] bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[390px] sm:max-w-[425px] bg-white fixed z-40">
           <div className="flex items-center justify-between w-full">
             <h3 className="font-semibold text-[18px]">Jami:</h3>
-            <p className="font-semibold text-[18px]"> {total?.toLocaleString("uz-UZ")} so‘m</p>
+            <p className="font-semibold text-[18px]">{total?.toLocaleString("uz-UZ")} so‘m</p>
           </div>
           <Button
             className="w-full mt-2.5"
@@ -135,36 +156,22 @@ export const CartPage = () => {
                 toast.error("Buyurtma umumiy summasi 500 000 so‘mdan oshishi kerak.");
                 return;
               }
-
               navigate("/checkout");
             }}
           >
             To’lov qilish
           </Button>
-
         </div>
       )}
 
       {buskets?.length === 0 && (
-        <div className="flex items-center justify-between px-[22px] py-2.5 border rounded-t-[20px] left-1/2 -translate-x-1/2 max-w-[390px] sm:max-w-[425px] bottom-0 bg-white w-full fixed z-40 ">
+        <div className="flex items-center justify-between px-[22px] py-2.5 border rounded-t-[20px] left-1/2 -translate-x-1/2 max-w-[390px] sm:max-w-[425px] bottom-0 bg-white w-full fixed z-40">
           {footerData.map(({ name, path, icon: Icon }, index) => {
             const isActive = pathname === path;
             return (
-              <Link
-                to={path}
-                key={index}
-                className="flex flex-col items-center"
-              >
-                <Icon
-                  className={`${isActive ? "text-mainColor" : "text-placeholderColor"
-                    }`}
-                />
-                <p
-                  className={`font-medium text-[12px] ${isActive ? "text-mainColor" : "text-placeholderColor"
-                    }`}
-                >
-                  {name}
-                </p>
+              <Link to={path} key={index} className="flex flex-col items-center">
+                <Icon className={`${isActive ? "text-mainColor" : "text-placeholderColor"}`} />
+                <p className={`font-medium text-[12px] ${isActive ? "text-mainColor" : "text-placeholderColor"}`}>{name}</p>
               </Link>
             );
           })}

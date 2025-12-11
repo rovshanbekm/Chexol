@@ -1,5 +1,5 @@
 
-import { X } from "lucide-react";
+import { Equal, X } from "lucide-react";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogHeader, AlertDialogTitle } from "../ui/alert-dialog"
 import { useGetOrdersById } from "../../hooks";
 import { Button } from "../ui/button";
@@ -34,7 +34,7 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
     return (
         <AlertDialog open={open} onOpenChange={toggleOpen} >
             <div className="relative">
-                <AlertDialogContent aria-describedby={undefined} className="flex flex-col gap-5 pt-[11px]! pr-[11px]! pl-5! pb-7.5! rounded-[15px] w-[366px]!">
+                <AlertDialogContent aria-describedby={undefined} className="flex flex-col gap-5 pt-[11px]! pr-[11px]! pl-5! pb-7.5! rounded-[15px] w-[396px]!">
                     <AlertDialogCancel className="border-none absolute right-0 top-0 h-10"><X /></AlertDialogCancel>
                     <AlertDialogHeader className="flex pt-2.5! text-start">
                         <AlertDialogTitle className="font-semibold text-xl text-modalTitleColor">
@@ -62,14 +62,17 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
                                 )}
                             </div>
 
-                            <div className="flex  gap-10">
+                            <div className="flex gap-10">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Mahsulot:</h4>
                                 <div className="flex flex-col gap-1">
                                     {orders?.items?.map((item: any) => (
                                         <div className="flex items-center gap-[5px]">
+                                            <img className="w-[16px] h-[16px]" src={item.image} alt="" />
                                             <p className="font-medium text-sm leading-6 text-secondColor">{item?.title}</p>
                                             <X className="size-2.5" />
                                             <p className="font-medium text-sm leading-6 text-secondColor">{item?.quantity} dona</p>
+                                            <Equal className="size-2.5" />
+                                            <p className="font-medium text-sm leading-6 text-secondColor">{Number(item?.price).toLocaleString("uz-UZ")} so'm</p>
                                         </div>
                                     ))}
                                 </div>
