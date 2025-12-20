@@ -103,6 +103,7 @@ export const CartDetailPage = () => {
             product_id: productsById?.id,
             quantity: count,
             color_id: selectedColor,
+            price: priceToShow,
         };
 
         createBuskets(payload, {
@@ -184,7 +185,7 @@ export const CartDetailPage = () => {
                     <h2 className="font-semibold text-lg">{productsById?.title}</h2>
                     <h4 className="text-sm text-placeholderColor">{productsById?.description}</h4>
 
-                    {selectedColor && (
+                    {selectedColor && productsById?.stock === 50 &&(
                         <p className="text-sm font-medium">Miqdor: {selectedImage?.stock} ta</p>
                     )}
 
