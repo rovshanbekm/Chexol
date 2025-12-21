@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Equal, X } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -49,7 +49,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                             key={orders.id}
                             className="flex items-start! flex-col gap-3 pt-3"
                         >
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">
                                     Buyurtma:
                                 </h4>
@@ -58,7 +58,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                                 </p>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">
                                     Sana:
                                 </h4>
@@ -67,7 +67,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                                 </p>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">
                                     Mahsulot:
                                 </h4>
@@ -75,13 +75,13 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                                     {orders?.items?.map((item: any) => (
                                         <p className="font-medium text-sm leading-6 text-secondColor flex gap-[5px] items-center">
                                             <span className="line-clamp-1">{item.title}</span>
-                                            <X size={10} /> {item.quantity}
+                                            <X size={10} /> {item.quantity} dona  <Equal className="size-2.5" /> {Number(item?.price).toLocaleString("uz-UZ")} so'm
                                         </p>
                                     ))}
                                 </div>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">
                                     To'lov turi:
                                 </h4>
@@ -90,7 +90,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                                 </p>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">
                                     Summa:
                                 </h4>
@@ -99,7 +99,7 @@ export const OrderHistoryModal = ({ open, toggleOpen, orderId }: AboutModalProps
                                 </p>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">
                                     Holati:
                                 </h4>

@@ -16,7 +16,7 @@ type FormValues = {
     payment_type?: string;
     items?: [{ product: string, quantity: number }];
     cashback?: string;
-    delivery_type?:string
+    delivery_type?: string
 };
 
 export const CheckoutPage = () => {
@@ -27,7 +27,7 @@ export const CheckoutPage = () => {
     const { data: userBalance } = useGetUsersProfile()
     const [valueinput, setValueinput] = useState("")
 
-    const { register, handleSubmit, reset, watch, setValue, control } = useForm<FormValues>({
+    const { register, handleSubmit, watch, setValue, control } = useForm<FormValues>({
         defaultValues: { full_name: "", phone: "", address: "", payment_type: "", cashback: "0", delivery_type: "" },
     })
 
@@ -42,21 +42,59 @@ export const CheckoutPage = () => {
     }, [cashback, setValue]);
 
     useEffect(() => {
-        const savedData = localStorage.getItem("checkout_form");
-        if (savedData) {
-            const parsed = JSON.parse(savedData);
-            reset(parsed);
-            if (parsed.phone) setValueinput(parsed.phone);
-        }
-    }, [reset]);
+        const subscription = watch((value) => {
+            localStorage.setItem("checkout_form", JSON.stringify(value));
+        });
 
+        return () => subscription.unsubscribe();
+    }, [watch]);
 
     useEffect(() => {
-        const subscription = watch((value) => {
-            localStorage.setItem("checkout_form", JSON.stringify(value))
-        })
-        return () => subscription.unsubscribe()
-    }, [watch])
+        const savedData = localStorage.getItem("checkout_form");
+
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+
+            if (parsed.payment_type) {
+                setValue("payment_type", parsed.payment_type);
+            }
+
+            if (parsed.delivery_type) {
+                setValue("delivery_type", parsed.delivery_type);
+            }
+
+            if (parsed.cashback) {
+                setValue("cashback", parsed.cashback);
+            }
+
+            if (parsed.full_name) {
+                setValue("full_name", parsed.full_name);
+            }
+
+            if (parsed.phone) {
+                setValue("phone", parsed.phone);
+                setValueinput(parsed.phone);
+            }
+        }
+    }, [setValue]);
+
+    useEffect(() => {
+        if (!userBalance) return;
+
+        const savedData = localStorage.getItem("checkout_form");
+        if (savedData) return;
+
+        const formatted = userBalance?.phone?.replace(
+            /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
+            "+$1 ($2) $3 $4 $5"
+        );
+
+        setValue("full_name", userBalance.full_name);
+        setValue("phone", formatted ?? "");
+        setValueinput(formatted ?? "");
+        setValue("cashback", "0");
+    }, [userBalance, setValue]);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let input = e.target.value.replace(/\D/g, "");
@@ -77,25 +115,6 @@ export const CheckoutPage = () => {
         setValue("phone", formattedValue);
     };
 
-    useEffect(() => {
-        if (userBalance) {
-            const formatted = userBalance?.phone?.replace(
-                /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
-                "+$1 ($2) $3 $4 $5"
-            );
-            setTimeout(() => {
-                reset({
-                    full_name: userBalance.full_name,
-                    phone: formatted ?? "",
-                    address: "",
-                    payment_type: "",
-                    cashback: "0"
-                });
-            }, 50)
-        }
-    }, [userBalance, reset]);
-
-
     const onSubmit = (data: FormValues) => {
         const formatted = userBalance?.phone?.replace(
             /^\+?(\d{3})(\d{2})(\d{3})(\d{2})(\d{2})$/,
@@ -103,13 +122,13 @@ export const CheckoutPage = () => {
         );
         const payload: any = {
             full_name: userBalance.full_name,
-            phone: formatted ?? userBalance.phone,
+            phone: formatted,
             address: addresses?.[0]?.id,
             items: cards.map((item: any) => ({
                 product: item.product_id,
                 quantity: item.quantity,
                 color: item.color_id,
-                price:item.price,
+                price: item.price,
             })),
         };
 
@@ -174,7 +193,7 @@ export const CheckoutPage = () => {
                                     {item.color_name}
                                 </span>
                             </div>
-                            <h5 className="font-semibold text-mainColor">{Number(item.price).toLocaleString("uz-UZ")}</h5>
+                            <h5 className="font-semibold text-mainColor">{Number(item.price).toLocaleString("uz-UZ")} so‘m</h5>
                             <h3 className="text-xs text-placeholderColor">Miqdor: {item.quantity}</h3>
                         </div>
                     </div>
@@ -266,9 +285,9 @@ export const CheckoutPage = () => {
                             {type === "BTS"
                                 ? "BTS pochta orqali"
                                 : type === "EMU"
-                                    ? "EMU pochta orqali":
+                                    ? "EMU pochta orqali" :
                                     type === "TAXI"
-                                    ? "Taksi orqali" : "Yuk mashina orqali" }
+                                        ? "Taksi orqali" : "Yuk mashina orqali"}
                         </span>
                     </label>
                 ))}

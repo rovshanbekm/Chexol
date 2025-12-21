@@ -41,17 +41,17 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
                             Buyurtma tafsiloti
                         </AlertDialogTitle>
                         <div className="flex flex-col gap-3 pt-3">
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Buyurtma:</h4>
                                 <p className="font-medium text-sm leading-6 text-secondColor">{orders?.order_number}</p>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Sana:</h4>
                                 <p className="font-medium text-sm leading-6 text-secondColor">{formatDate(orders?.created_at)}</p>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Holati:</h4>
                                 {orders?.payment_status === "paid" ? (
                                     <p className="text-xs text-statusColor px-2.5 h-[33px] bg-bgStatusColor rounded-[10px] flex items-center justify-center">To'langan</p>
@@ -62,7 +62,7 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
                                 )}
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Mahsulot:</h4>
                                 <div className="flex flex-col gap-1">
                                     {orders?.items?.map((item: any) => (
@@ -78,7 +78,7 @@ export const AboutModal = ({ open, toggleOpen, orderId }: AboutModalProps) => {
                                 </div>
                             </div>
 
-                            <div className="flex gap-10">
+                            <div className="flex gap-7">
                                 <h4 className="text-sm leading-6 text-placeholderColor w-[72px]">Manzil:</h4>
                                 <p className="font-medium text-sm leading-6 text-secondColor">{orders?.address_region_name}, {orders?.address_name}</p>
                             </div>

@@ -101,7 +101,6 @@ export const useGetFilteredProducts = (filters: FilterParams) => {
                 return res.data.data;
             } catch (error) {
                 console.error(error);
-                toast.error("Mahsulotlarni olishda xatolik");
                 return [];
             }
         },
